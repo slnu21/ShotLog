@@ -126,7 +126,9 @@ $cert = New-SelfSignedCertificate -Type Custom -Subject "CN=ShotLog-Test" `
 ## 7. Partner Center 제출
 - **Packages**: `.msixupload` 업로드.
 - **Store listing(언어별: 한국어/영어)**: `docs/store/listing.md` 의 카피 사용. 스크린샷 `docs/store/screenshots/*.png`(데스크톱 1366×768) 1~10장, 1:1 타일 `docs/store/assets/StoreTile-300x300.png`, 16:9 히어로 `Hero-1920x1080.png`.
-- **Privacy policy URL**: `docs/store/privacy-policy.md` 내용을 HTTPS 페이지로 호스팅 후 URL 입력(필수).
+- **Privacy policy URL**(필수): GitHub Pages로 호스팅됨 →
+  **`https://slnu21.github.io/ShotLog/store/privacy-policy.html`** (소스: `docs/store/privacy-policy.md`, main:/docs).
+  ⚠️ 제출 전 정책 본문의 `[연락처 이메일]`/`[contact email]`을 실제 값으로 채울 것.
 - **Age ratings(IARC)**: 설문 작성(스크린샷 유틸리티 → 전연령 예상).
 - **Properties**: 카테고리 *생산성*(또는 *유틸리티 및 도구*), 지원 연락처.
 - **Notes for certification**: 아래 정당화 문구 붙여넣기.
