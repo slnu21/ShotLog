@@ -1,9 +1,10 @@
+---
+title: ShotLog 개인정보처리방침 / Privacy Policy
+---
+
 # ShotLog 개인정보처리방침 / Privacy Policy
 
-> Store 제출에는 이 내용을 **HTTPS 웹페이지**로 호스팅하고 그 URL을 Partner Center에 입력해야 합니다.
-> 아래 `[연락처 이메일]`/`[YYYY-MM-DD]`를 실제 값으로 바꾸세요. (이 문서는 현재 앱 동작을 사실 그대로 기술합니다 — 코드가 바뀌면 함께 갱신하세요.)
-
-최종 업데이트: [YYYY-MM-DD]
+최종 업데이트 / Last updated: 2026-06-12
 
 ---
 
