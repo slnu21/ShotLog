@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using ShotLog.Models;
+using ShotLog.Resources;
 
 namespace ShotLog.Infrastructure;
 
@@ -34,9 +35,9 @@ public static class CaptureIO
             var sb = new StringBuilder();
             sb.AppendLine($"# {Path.GetFileNameWithoutExtension(r.ImagePath)}");
             sb.AppendLine();
-            sb.AppendLine($"- 시각: {r.CapturedAt:yyyy-MM-dd HH:mm:ss}");
-            if (!string.IsNullOrWhiteSpace(r.PresetName)) sb.AppendLine($"- 프리셋: {r.PresetName}");
-            if (r.Tags.Count > 0) sb.AppendLine($"- 태그: {string.Join(", ", r.Tags)}");
+            sb.AppendLine($"- {Strings.Sidecar_Time}: {r.CapturedAt:yyyy-MM-dd HH:mm:ss}");
+            if (!string.IsNullOrWhiteSpace(r.PresetName)) sb.AppendLine($"- {Strings.Common_Preset}: {r.PresetName}");
+            if (r.Tags.Count > 0) sb.AppendLine($"- {Strings.Common_Tags}: {string.Join(", ", r.Tags)}");
             sb.AppendLine();
             sb.AppendLine($"![]({Path.GetFileName(r.ImagePath)})");
             if (!string.IsNullOrWhiteSpace(r.Memo))

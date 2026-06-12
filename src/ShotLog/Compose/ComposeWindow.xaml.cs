@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using ShotLog.Infrastructure;
 using ShotLog.Models;
+using ShotLog.Resources;
 using WinForms = System.Windows.Forms;
 
 namespace ShotLog.Compose;
@@ -33,7 +34,8 @@ public partial class ComposeWindow : Window
     public void ReloadData()
     {
         if (string.IsNullOrWhiteSpace(OutputBox.Text)) OutputBox.Text = App.ExportRoot();
-        if (string.IsNullOrWhiteSpace(TitleBox.Text)) TitleBox.Text = $"{DateTimeOffset.Now:yyyy-MM-dd} 캡처 기록";
+        if (string.IsNullOrWhiteSpace(TitleBox.Text))
+            TitleBox.Text = string.Format(Strings.Compose_DefaultTitleFormat, DateTimeOffset.Now.ToString("yyyy-MM-dd"));
 
         BuildTagFilter();
         BuildPresetFilter();
@@ -48,7 +50,7 @@ public partial class ComposeWindow : Window
             .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(t => t).ToList();
         if (tags.Count == 0)
         {
-            TagFilter.Children.Add(new TextBlock { Text = "(태그 없음)", Foreground = (System.Windows.Media.Brush)FindResource("TextDim"), FontSize = 12 });
+            TagFilter.Children.Add(new TextBlock { Text = Strings.Compose_NoTags, Foreground = (System.Windows.Media.Brush)FindResource("TextDim"), FontSize = 12 });
             return;
         }
         foreach (var t in tags)
@@ -81,9 +83,9 @@ public partial class ComposeWindow : Window
     private void BuildDateFilter()
     {
         DateFilter.Children.Clear();
-        AddDateChip("전체", "all");
-        AddDateChip("오늘", "today");
-        AddDateChip("최근 7일", "week");
+        AddDateChip(Strings.Common_All, "all");
+        AddDateChip(Strings.Compose_Today, "today");
+        AddDateChip(Strings.Compose_Last7, "week");
     }
 
     private void AddDateChip(string label, string mode)
@@ -136,7 +138,7 @@ public partial class ComposeWindow : Window
     private void UpdatePreview()
     {
         var selected = _items.Where(i => i.Selected).Select(i => i.Record).ToList();
-        CountLabel.Text = $"포함할 캡처 · 시간순 ({selected.Count}/{_items.Count})";
+        CountLabel.Text = string.Format(Strings.Compose_CountFormat, selected.Count, _items.Count);
         PreviewBox.Text = MarkdownExporter.BuildPreview(selected, TitleBox.Text, FrontMatterBox.IsChecked == true);
         GenerateBtn.IsEnabled = selected.Count > 0;
     }
@@ -154,7 +156,7 @@ public partial class ComposeWindow : Window
         var selected = _items.Where(i => i.Selected).Select(i => i.Record).ToList();
         if (selected.Count == 0)
         {
-            MessageBox.Show(this, "포함할 캡처를 하나 이상 선택하세요.", "ShotLog", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, Strings.Compose_SelectAtLeastOne, "ShotLog", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -164,12 +166,12 @@ public partial class ComposeWindow : Window
         try
         {
             var res = MarkdownExporter.Export(selected, TitleBox.Text.Trim(), outputRoot, FrontMatterBox.IsChecked == true);
-            StatusLabel.Text = $"생성됨: {res.MarkdownPath} · 이미지 {res.ImageCount}장";
+            StatusLabel.Text = string.Format(Strings.Compose_GeneratedStatusFormat, res.MarkdownPath, res.ImageCount);
             Process.Start(new ProcessStartInfo(res.MarkdownPath) { UseShellExecute = true });
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, "내보내기 실패: " + ex.Message, "ShotLog", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, Strings.Compose_ExportFailed + ex.Message, "ShotLog", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

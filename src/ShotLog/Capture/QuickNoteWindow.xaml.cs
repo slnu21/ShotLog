@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using ShotLog.Infrastructure;
 using ShotLog.Models;
+using ShotLog.Resources;
 
 namespace ShotLog.Capture;
 
@@ -203,7 +204,7 @@ public partial class QuickNoteWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, "저장 실패: " + ex.Message, "ShotLog", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, Strings.QuickNote_SaveFailed + ex.Message, "ShotLog", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

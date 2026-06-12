@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ShotLog.Models;
+using ShotLog.Resources;
 
 namespace ShotLog.Infrastructure;
 
@@ -90,10 +91,10 @@ public static class MarkdownExporter
             sb.AppendLine();
         }
 
-        sb.AppendLine($"# {(string.IsNullOrWhiteSpace(title) ? "제목 없음" : title)}");
+        sb.AppendLine($"# {(string.IsNullOrWhiteSpace(title) ? Strings.Export_Untitled : title)}");
         sb.AppendLine();
         string meta = $"_{date:yyyy-MM-dd}";
-        if (allTags.Count > 0) meta += $" · 태그: {string.Join(", ", allTags)}";
+        if (allTags.Count > 0) meta += $" · {Strings.Common_Tags}: {string.Join(", ", allTags)}";
         meta += "_";
         sb.AppendLine(meta);
         sb.AppendLine();

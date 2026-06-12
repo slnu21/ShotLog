@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_Save" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>닫기</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="Common_Browse" xml:space="preserve">
+    <value>찾아보기</value>
+  </data>
+  <data name="Common_All" xml:space="preserve">
+    <value>전체</value>
+  </data>
+  <data name="Common_Tags" xml:space="preserve">
+    <value>태그</value>
+  </data>
+  <data name="Common_Preset" xml:space="preserve">
+    <value>프리셋</value>
+  </data>
+  <data name="Common_DefaultPreset" xml:space="preserve">
+    <value>기본</value>
+  </data>
+  <data name="Tray_CaptureMonitor" xml:space="preserve">
+    <value>활성 모니터 캡처</value>
+  </data>
+  <data name="Tray_CaptureNote" xml:space="preserve">
+    <value>캡처 + 메모</value>
+  </data>
+  <data name="Tray_CaptureRegion" xml:space="preserve">
+    <value>영역 선택 캡처</value>
+  </data>
+  <data name="Tray_CaptureWindow" xml:space="preserve">
+    <value>활성 창 캡처</value>
+  </data>
+  <data name="Tray_Inbox" xml:space="preserve">
+    <value>인박스</value>
+  </data>
+  <data name="Tray_Compose" xml:space="preserve">
+    <value>글쓰기 내보내기</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>종료</value>
+  </data>
+  <data name="QuickNote_Title" xml:space="preserve">
+    <value>ShotLog — 캡처 메모</value>
+  </data>
+  <data name="QuickNote_Header" xml:space="preserve">
+    <value>캡처에 메모</value>
+  </data>
+  <data name="QuickNote_SaveLocation" xml:space="preserve">
+    <value>저장 위치 (프리셋)</value>
+  </data>
+  <data name="QuickNote_TagsWatermark" xml:space="preserve">
+    <value>태그 입력 후 Enter</value>
+  </data>
+  <data name="QuickNote_Memo" xml:space="preserve">
+    <value>메모</value>
+  </data>
+  <data name="QuickNote_Hint" xml:space="preserve">
+    <value>Enter 저장 · Shift+Enter 줄바꿈 · Esc 버리기</value>
+  </data>
+  <data name="QuickNote_Discard" xml:space="preserve">
+    <value>버리기</value>
+  </data>
+  <data name="QuickNote_SaveFailed" xml:space="preserve">
+    <value>저장 실패: </value>
+  </data>
+  <data name="Region_Title" xml:space="preserve">
+    <value>ShotLog — 영역 선택</value>
+  </data>
+  <data name="Region_Hint" xml:space="preserve">
+    <value>드래그하여 영역 선택 · Esc 취소</value>
+  </data>
+  <data name="Compose_Title" xml:space="preserve">
+    <value>ShotLog — 글쓰기 내보내기</value>
+  </data>
+  <data name="Compose_GroupBy" xml:space="preserve">
+    <value>묶음 기준</value>
+  </data>
+  <data name="Compose_Period" xml:space="preserve">
+    <value>기간</value>
+  </data>
+  <data name="Compose_TitleLabel" xml:space="preserve">
+    <value>제목</value>
+  </data>
+  <data name="Compose_OutputFolder" xml:space="preserve">
+    <value>출력 폴더</value>
+  </data>
+  <data name="Compose_Preview" xml:space="preserve">
+    <value>미리보기 (표준 Markdown)</value>
+  </data>
+  <data name="Compose_IncludeFrontMatter" xml:space="preserve">
+    <value>YAML front matter 포함</value>
+  </data>
+  <data name="Compose_CreateAndOpen" xml:space="preserve">
+    <value>생성 후 열기</value>
+  </data>
+  <data name="Compose_Today" xml:space="preserve">
+    <value>오늘</value>
+  </data>
+  <data name="Compose_Last7" xml:space="preserve">
+    <value>최근 7일</value>
+  </data>
+  <data name="Compose_CountFormat" xml:space="preserve">
+    <value>포함할 캡처 · 시간순 ({0}/{1})</value>
+  </data>
+  <data name="Compose_DefaultTitleFormat" xml:space="preserve">
+    <value>{0} 캡처 기록</value>
+  </data>
+  <data name="Compose_NoTags" xml:space="preserve">
+    <value>(태그 없음)</value>
+  </data>
+  <data name="Compose_NoMemo" xml:space="preserve">
+    <value>(메모 없음)</value>
+  </data>
+  <data name="Compose_SelectAtLeastOne" xml:space="preserve">
+    <value>포함할 캡처를 하나 이상 선택하세요.</value>
+  </data>
+  <data name="Compose_ExportFailed" xml:space="preserve">
+    <value>내보내기 실패: </value>
+  </data>
+  <data name="Compose_GeneratedStatusFormat" xml:space="preserve">
+    <value>생성됨: {0} · 이미지 {1}장</value>
+  </data>
+  <data name="Inbox_Title" xml:space="preserve">
+    <value>ShotLog — 인박스</value>
+  </data>
+  <data name="Inbox_Refresh" xml:space="preserve">
+    <value>새로고침</value>
+  </data>
+  <data name="Inbox_ComposeButton" xml:space="preserve">
+    <value>✍ 글쓰기 내보내기</value>
+  </data>
+  <data name="Inbox_NoImage" xml:space="preserve">
+    <value>이미지 없음</value>
+  </data>
+  <data name="Inbox_DeleteButton" xml:space="preserve">
+    <value>🗑 삭제</value>
+  </data>
+  <data name="Inbox_Empty" xml:space="preserve">
+    <value>아직 캡처가 없습니다. 단축키로 캡처해 보세요.</value>
+  </data>
+  <data name="Inbox_NoMatch" xml:space="preserve">
+    <value>조건에 맞는 캡처가 없습니다.</value>
+  </data>
+  <data name="Inbox_DeleteConfirmFormat" xml:space="preserve">
+    <value>이 캡처를 삭제할까요?
+{0}
+
+이미지 파일도 함께 삭제됩니다.</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>ShotLog — 설정</value>
+  </data>
+  <data name="Settings_PresetsSection" xml:space="preserve">
+    <value>프리셋 (저장 위치)</value>
+  </data>
+  <data name="Settings_Name" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="Settings_Folder" xml:space="preserve">
+    <value>폴더</value>
+  </data>
+  <data name="Settings_DefaultTags" xml:space="preserve">
+    <value>기본 태그 (쉼표)</value>
+  </data>
+  <data name="Settings_Color" xml:space="preserve">
+    <value>색상 (#RRGGBB)</value>
+  </data>
+  <data name="Settings_AddPreset" xml:space="preserve">
+    <value>+ 프리셋 추가</value>
+  </data>
+  <data name="Settings_HotkeysSection" xml:space="preserve">
+    <value>단축키</value>
+  </data>
+  <data name="Settings_HkInstant" xml:space="preserve">
+    <value>즉시 캡처 → 활성 프리셋</value>
+  </data>
+  <data name="Settings_HkNote" xml:space="preserve">
+    <value>캡처 + 메모</value>
+  </data>
+  <data name="Settings_HkRegion" xml:space="preserve">
+    <value>영역 선택 캡처</value>
+  </data>
+  <data name="Settings_HkWindow" xml:space="preserve">
+    <value>활성 창 캡처</value>
+  </data>
+  <data name="Settings_HkInbox" xml:space="preserve">
+    <value>인박스 열기</value>
+  </data>
+  <data name="Settings_HotkeyHint" xml:space="preserve">
+    <value>형식: Ctrl+Alt+S, Ctrl+Shift+1 …  (변경은 저장 시 적용)</value>
+  </data>
+  <data name="Settings_ExportSection" xml:space="preserve">
+    <value>내보내기</value>
+  </data>
+  <data name="Settings_DefaultOutputFolder" xml:space="preserve">
+    <value>기본 출력 폴더</value>
+  </data>
+  <data name="Settings_Sidecar" xml:space="preserve">
+    <value>PNG 옆에 같은 이름 .md 사이드카 생성 (탐색기에서도 메모 확인)</value>
+  </data>
+  <data name="Settings_Notify" xml:space="preserve">
+    <value>즉시 캡처 후 트레이 알림 표시</value>
+  </data>
+  <data name="Settings_GeneralSection" xml:space="preserve">
+    <value>일반</value>
+  </data>
+  <data name="Settings_AutoStart" xml:space="preserve">
+    <value>Windows 시작 시 자동 실행</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="Settings_LangSystem" xml:space="preserve">
+    <value>시스템 자동</value>
+  </data>
+  <data name="Settings_HkShortInstant" xml:space="preserve">
+    <value>즉시 캡처</value>
+  </data>
+  <data name="Settings_HkShortNote" xml:space="preserve">
+    <value>캡처+메모</value>
+  </data>
+  <data name="Settings_HkShortRegion" xml:space="preserve">
+    <value>영역 선택</value>
+  </data>
+  <data name="Settings_HkShortWindow" xml:space="preserve">
+    <value>활성 창</value>
+  </data>
+  <data name="Settings_HkShortInbox" xml:space="preserve">
+    <value>인박스</value>
+  </data>
+  <data name="Settings_InvalidHotkeyFormat" xml:space="preserve">
+    <value>올바르지 않은 단축키: {0}
+예: Ctrl+Alt+S</value>
+  </data>
+  <data name="Settings_AutoStartLockedTip" xml:space="preserve">
+    <value>작업 관리자 &gt; 시작프로그램에서 ShotLog를 켜야 합니다.</value>
+  </data>
+  <data name="Export_Untitled" xml:space="preserve">
+    <value>제목 없음</value>
+  </data>
+  <data name="Sidecar_Time" xml:space="preserve">
+    <value>시각</value>
+  </data>
+  <data name="Notify_SavedFormat" xml:space="preserve">
+    <value>{0} · {1} 저장됨 (메모 추가 {2})</value>
+  </data>
+</root>

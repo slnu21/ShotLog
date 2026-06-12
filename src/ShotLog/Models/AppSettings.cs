@@ -27,4 +27,7 @@ public sealed class AppSettings
     public bool NotifyOnCapture { get; set; } = true;
 
     public bool AutoStart { get; set; } = false;
+
+    /// <summary>UI language: "system" (follow OS), "ko", or "en". Applied at startup by App.ApplyCulture.</summary>
+    public string Language { get; set; } = "system";
 }

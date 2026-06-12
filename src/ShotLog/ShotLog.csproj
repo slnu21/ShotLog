@@ -16,6 +16,8 @@
     <!-- WFAC010 is a WinForms-only analyzer suggestion that does not apply to our WPF-first host. -->
     <NoWarn>$(NoWarn);WFAC010</NoWarn>
     <Version>1.0.0.0</Version>
+    <!-- Neutral (main-assembly) Strings.resx are English; ko ships as a satellite assembly. -->
+    <NeutralLanguage>en</NeutralLanguage>
     <!-- Enables the self-contained win-x64 MSIX build driven by ShotLog.Package.wapproj
          (restore must produce a net8.0-windows.../win-x64 asset; see NETSDK1047). RID-less
          builds (plain dotnet build/run and the selftest flag) stay framework-dependent

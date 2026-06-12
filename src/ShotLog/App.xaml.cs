@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ using ShotLog.Compose;
 using ShotLog.Inbox;
 using ShotLog.Infrastructure;
 using ShotLog.Models;
+using ShotLog.Resources;
 using ShotLog.Settings;
 
 namespace ShotLog;
@@ -34,6 +36,36 @@ public partial class App : Application
     private InboxWindow? _inbox;
     private ComposeWindow? _compose;
     private SettingsWindow? _settings;
+
+    // UI language. The OS culture captured at load is the "system" baseline; ApplyCulture drives
+    // resource lookup (Strings) and the thread UI culture for any new windows.
+    private static readonly CultureInfo _osUICulture = CultureInfo.CurrentUICulture;
+    private static string _currentLang = "";
+
+    private static void ApplyCulture(string lang)
+    {
+        _currentLang = lang;
+        CultureInfo c = lang switch
+        {
+            "ko" => new CultureInfo("ko-KR"),
+            "en" => new CultureInfo("en-US"),
+            _ => _osUICulture,                 // "system": follow the OS (neutral English fallback)
+        };
+        Strings.Culture = lang == "system" ? null : c;
+        CultureInfo.CurrentUICulture = c;
+        CultureInfo.DefaultThreadCurrentUICulture = c;
+    }
+
+    /// <summary>Live-applies a language change: re-cultures, rebuilds the tray menu, and drops open
+    /// windows so they recreate (re-evaluating their x:Static strings) in the new language. Transient
+    /// capture windows are created per use, so they pick up the new language automatically.</summary>
+    private void ApplyLanguageChange()
+    {
+        ApplyCulture(Settings.Current.Language);
+        _tray?.RebuildMenu();
+        _inbox?.Close();
+        _compose?.Close();
+    }
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -81,6 +113,7 @@ public partial class App : Application
 
         Settings = new SettingsStore();
         Settings.Load();
+        ApplyCulture(Settings.Current.Language);
         EnsureDefaults();
 
         Captures = new CaptureStore();
@@ -126,7 +159,7 @@ public partial class App : Application
             s.Presets.Add(new Preset
             {
                 Id = Guid.NewGuid().ToString("N"),
-                Name = "기본",
+                Name = Strings.Common_DefaultPreset,
                 FolderPath = folder,
                 Color = "#5AA0FF",
             });
@@ -176,7 +209,7 @@ public partial class App : Application
                 Captures.Save();
                 if (Settings.Current.SidecarEnabled) CaptureIO.WriteSidecar(rec);
                 if (Settings.Current.NotifyOnCapture)
-                    _tray?.Notify("ShotLog", $"{preset.Name} · {Path.GetFileName(path)} 저장됨 (메모 추가 {Settings.Current.NoteHotkey})");
+                    _tray?.Notify("ShotLog", string.Format(Strings.Notify_SavedFormat, preset.Name, Path.GetFileName(path), Settings.Current.NoteHotkey));
                 _inbox?.ReloadIfVisible();
             }
             finally
@@ -265,7 +298,13 @@ public partial class App : Application
         if (_settings == null)
         {
             _settings = new SettingsWindow(Settings);
-            _settings.Saved += () => { RegisterHotkeys(); AutoStartService.Apply(Settings.Current.AutoStart); _inbox?.ReloadIfVisible(); };
+            _settings.Saved += () =>
+            {
+                RegisterHotkeys();
+                AutoStartService.Apply(Settings.Current.AutoStart);
+                if (Settings.Current.Language != _currentLang) ApplyLanguageChange();
+                _inbox?.ReloadIfVisible();
+            };
             _settings.Closed += (_, __) => _settings = null;
         }
         ShowWindow(_settings);
@@ -453,6 +492,11 @@ public partial class App : Application
         string outDir = (idx >= 0 && idx + 1 < args.Length && !args[idx + 1].StartsWith("--"))
             ? args[idx + 1]
             : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ShotLog", "screens");
+        // Optional language for localized screenshots: --screens <dir> [ko|en]. Default follows the OS.
+        string lang = (idx >= 0 && idx + 2 < args.Length && (args[idx + 2] == "ko" || args[idx + 2] == "en"))
+            ? args[idx + 2] : "system";
+        ApplyCulture(lang);
+        bool en = lang == "en";
 
         var sb = new StringBuilder();
         try
@@ -465,20 +509,28 @@ public partial class App : Application
             Settings = new SettingsStore();
             Settings.Current.Presets = new()
             {
-                new Models.Preset { Id = "p-work", Name = "작업 로그", FolderPath = sampleDir, Color = "#5AA0FF", DefaultTags = new() { "작업" } },
-                new Models.Preset { Id = "p-bug",  Name = "버그",     FolderPath = sampleDir, Color = "#F85149", DefaultTags = new() { "버그" } },
-                new Models.Preset { Id = "p-idea", Name = "아이디어", FolderPath = sampleDir, Color = "#7DEFD6", DefaultTags = new() { "아이디어" } },
+                new Models.Preset { Id = "p-work", Name = en ? "Work log" : "작업 로그", FolderPath = sampleDir, Color = "#5AA0FF", DefaultTags = new() { en ? "work" : "작업" } },
+                new Models.Preset { Id = "p-bug",  Name = en ? "Bug" : "버그",           FolderPath = sampleDir, Color = "#F85149", DefaultTags = new() { en ? "bug" : "버그" } },
+                new Models.Preset { Id = "p-idea", Name = en ? "Idea" : "아이디어",       FolderPath = sampleDir, Color = "#7DEFD6", DefaultTags = new() { en ? "idea" : "아이디어" } },
             };
             Settings.Current.ActivePresetId = "p-work";
 
             Captures = new CaptureStore();
-            var seed = new (string Label, System.Drawing.Color Tint, string PresetId, string PName, string Memo, string[] Tags)[]
-            {
-                ("대시보드 로딩 지연", System.Drawing.Color.FromArgb(0x5A, 0xA0, 0xFF), "p-bug",  "버그",     "첫 로딩이 3초+ 걸림. 캐시 미스 의심.", new[] { "버그", "성능" }),
-                ("결제 플로우 시안",  System.Drawing.Color.FromArgb(0x2D, 0xD4, 0xBF), "p-work", "작업 로그", "2단계 → 1단계로 단축 제안.",       new[] { "작업", "UX" }),
-                ("온보딩 카피 검토",  System.Drawing.Color.FromArgb(0xE3, 0xB3, 0x41), "p-idea", "아이디어", "환영 문구 톤 통일 필요.",           new[] { "아이디어" }),
-                ("설정 화면 정렬",    System.Drawing.Color.FromArgb(0xF8, 0x51, 0x49), "p-work", "작업 로그", "스크롤바가 버튼에 가림 → 수정함.",   new[] { "작업", "버그" }),
-            };
+            var seed = en
+                ? new (string Label, System.Drawing.Color Tint, string PresetId, string PName, string Memo, string[] Tags)[]
+                {
+                    ("Dashboard load delay",  System.Drawing.Color.FromArgb(0x5A, 0xA0, 0xFF), "p-bug",  "Bug",      "First load takes 3s+. Suspect a cache miss.", new[] { "bug", "perf" }),
+                    ("Checkout flow mockup",  System.Drawing.Color.FromArgb(0x2D, 0xD4, 0xBF), "p-work", "Work log", "Propose cutting 2 steps down to 1.",          new[] { "work", "UX" }),
+                    ("Onboarding copy review",System.Drawing.Color.FromArgb(0xE3, 0xB3, 0x41), "p-idea", "Idea",     "Unify the tone of the welcome copy.",         new[] { "idea" }),
+                    ("Settings screen layout",System.Drawing.Color.FromArgb(0xF8, 0x51, 0x49), "p-work", "Work log", "Scrollbar covered the button → fixed.",        new[] { "work", "bug" }),
+                }
+                : new (string Label, System.Drawing.Color Tint, string PresetId, string PName, string Memo, string[] Tags)[]
+                {
+                    ("대시보드 로딩 지연", System.Drawing.Color.FromArgb(0x5A, 0xA0, 0xFF), "p-bug",  "버그",     "첫 로딩이 3초+ 걸림. 캐시 미스 의심.", new[] { "버그", "성능" }),
+                    ("결제 플로우 시안",  System.Drawing.Color.FromArgb(0x2D, 0xD4, 0xBF), "p-work", "작업 로그", "2단계 → 1단계로 단축 제안.",       new[] { "작업", "UX" }),
+                    ("온보딩 카피 검토",  System.Drawing.Color.FromArgb(0xE3, 0xB3, 0x41), "p-idea", "아이디어", "환영 문구 톤 통일 필요.",           new[] { "아이디어" }),
+                    ("설정 화면 정렬",    System.Drawing.Color.FromArgb(0xF8, 0x51, 0x49), "p-work", "작업 로그", "스크롤바가 버튼에 가림 → 수정함.",   new[] { "작업", "버그" }),
+                };
             var now = DateTimeOffset.Now;
             for (int i = 0; i < seed.Length; i++)
             {
@@ -500,7 +552,7 @@ public partial class App : Application
             var settingsWin = new SettingsWindow(Settings);
             ShotWindow(settingsWin, null, outDir, "03-settings.png", sb);
 
-            var quick = new QuickNoteWindow(MakeSampleBitmap("결제 플로우 시안", System.Drawing.Color.FromArgb(0x2D, 0xD4, 0xBF)), Settings, Captures);
+            var quick = new QuickNoteWindow(MakeSampleBitmap(en ? "Checkout flow mockup" : "결제 플로우 시안", System.Drawing.Color.FromArgb(0x2D, 0xD4, 0xBF)), Settings, Captures);
             ShotWindow(quick, null, outDir, "04-quicknote.png", sb);
 
             sb.AppendLine("RESULT=OK outDir=" + outDir);

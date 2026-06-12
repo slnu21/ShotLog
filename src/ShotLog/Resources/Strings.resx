@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Common_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="Common_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Common_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Common_Preset" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="Common_DefaultPreset" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Tray_CaptureMonitor" xml:space="preserve">
+    <value>Capture Active Monitor</value>
+  </data>
+  <data name="Tray_CaptureNote" xml:space="preserve">
+    <value>Capture + Memo</value>
+  </data>
+  <data name="Tray_CaptureRegion" xml:space="preserve">
+    <value>Capture Region</value>
+  </data>
+  <data name="Tray_CaptureWindow" xml:space="preserve">
+    <value>Capture Active Window</value>
+  </data>
+  <data name="Tray_Inbox" xml:space="preserve">
+    <value>Inbox</value>
+  </data>
+  <data name="Tray_Compose" xml:space="preserve">
+    <value>Compose &amp; Export</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Tray_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="QuickNote_Title" xml:space="preserve">
+    <value>ShotLog — Capture Note</value>
+  </data>
+  <data name="QuickNote_Header" xml:space="preserve">
+    <value>Note on capture</value>
+  </data>
+  <data name="QuickNote_SaveLocation" xml:space="preserve">
+    <value>Save location (preset)</value>
+  </data>
+  <data name="QuickNote_TagsWatermark" xml:space="preserve">
+    <value>Type a tag, then Enter</value>
+  </data>
+  <data name="QuickNote_Memo" xml:space="preserve">
+    <value>Memo</value>
+  </data>
+  <data name="QuickNote_Hint" xml:space="preserve">
+    <value>Enter to save · Shift+Enter newline · Esc to discard</value>
+  </data>
+  <data name="QuickNote_Discard" xml:space="preserve">
+    <value>Discard</value>
+  </data>
+  <data name="QuickNote_SaveFailed" xml:space="preserve">
+    <value>Save failed: </value>
+  </data>
+  <data name="Region_Title" xml:space="preserve">
+    <value>ShotLog — Select Region</value>
+  </data>
+  <data name="Region_Hint" xml:space="preserve">
+    <value>Drag to select a region · Esc to cancel</value>
+  </data>
+  <data name="Compose_Title" xml:space="preserve">
+    <value>ShotLog — Compose &amp; Export</value>
+  </data>
+  <data name="Compose_GroupBy" xml:space="preserve">
+    <value>Group by</value>
+  </data>
+  <data name="Compose_Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="Compose_TitleLabel" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Compose_OutputFolder" xml:space="preserve">
+    <value>Output folder</value>
+  </data>
+  <data name="Compose_Preview" xml:space="preserve">
+    <value>Preview (standard Markdown)</value>
+  </data>
+  <data name="Compose_IncludeFrontMatter" xml:space="preserve">
+    <value>Include YAML front matter</value>
+  </data>
+  <data name="Compose_CreateAndOpen" xml:space="preserve">
+    <value>Create and open</value>
+  </data>
+  <data name="Compose_Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Compose_Last7" xml:space="preserve">
+    <value>Last 7 days</value>
+  </data>
+  <data name="Compose_CountFormat" xml:space="preserve">
+    <value>Captures to include · chronological ({0}/{1})</value>
+  </data>
+  <data name="Compose_DefaultTitleFormat" xml:space="preserve">
+    <value>{0} Capture Log</value>
+  </data>
+  <data name="Compose_NoTags" xml:space="preserve">
+    <value>(no tags)</value>
+  </data>
+  <data name="Compose_NoMemo" xml:space="preserve">
+    <value>(no memo)</value>
+  </data>
+  <data name="Compose_SelectAtLeastOne" xml:space="preserve">
+    <value>Select at least one capture to include.</value>
+  </data>
+  <data name="Compose_ExportFailed" xml:space="preserve">
+    <value>Export failed: </value>
+  </data>
+  <data name="Compose_GeneratedStatusFormat" xml:space="preserve">
+    <value>Generated: {0} · {1} image(s)</value>
+  </data>
+  <data name="Inbox_Title" xml:space="preserve">
+    <value>ShotLog — Inbox</value>
+  </data>
+  <data name="Inbox_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Inbox_ComposeButton" xml:space="preserve">
+    <value>✍ Compose &amp; Export</value>
+  </data>
+  <data name="Inbox_NoImage" xml:space="preserve">
+    <value>No image</value>
+  </data>
+  <data name="Inbox_DeleteButton" xml:space="preserve">
+    <value>🗑 Delete</value>
+  </data>
+  <data name="Inbox_Empty" xml:space="preserve">
+    <value>No captures yet. Try capturing with a hotkey.</value>
+  </data>
+  <data name="Inbox_NoMatch" xml:space="preserve">
+    <value>No captures match the filter.</value>
+  </data>
+  <data name="Inbox_DeleteConfirmFormat" xml:space="preserve">
+    <value>Delete this capture?
+{0}
+
+The image file will be deleted too.</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>ShotLog — Settings</value>
+  </data>
+  <data name="Settings_PresetsSection" xml:space="preserve">
+    <value>Presets (save locations)</value>
+  </data>
+  <data name="Settings_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Settings_Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="Settings_DefaultTags" xml:space="preserve">
+    <value>Default tags (comma)</value>
+  </data>
+  <data name="Settings_Color" xml:space="preserve">
+    <value>Color (#RRGGBB)</value>
+  </data>
+  <data name="Settings_AddPreset" xml:space="preserve">
+    <value>+ Add preset</value>
+  </data>
+  <data name="Settings_HotkeysSection" xml:space="preserve">
+    <value>Hotkeys</value>
+  </data>
+  <data name="Settings_HkInstant" xml:space="preserve">
+    <value>Instant capture → active preset</value>
+  </data>
+  <data name="Settings_HkNote" xml:space="preserve">
+    <value>Capture + memo</value>
+  </data>
+  <data name="Settings_HkRegion" xml:space="preserve">
+    <value>Region capture</value>
+  </data>
+  <data name="Settings_HkWindow" xml:space="preserve">
+    <value>Active window capture</value>
+  </data>
+  <data name="Settings_HkInbox" xml:space="preserve">
+    <value>Open Inbox</value>
+  </data>
+  <data name="Settings_HotkeyHint" xml:space="preserve">
+    <value>Format: Ctrl+Alt+S, Ctrl+Shift+1 …  (applies on save)</value>
+  </data>
+  <data name="Settings_ExportSection" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Settings_DefaultOutputFolder" xml:space="preserve">
+    <value>Default output folder</value>
+  </data>
+  <data name="Settings_Sidecar" xml:space="preserve">
+    <value>Write a same-named .md sidecar next to the PNG (memo visible in Explorer)</value>
+  </data>
+  <data name="Settings_Notify" xml:space="preserve">
+    <value>Show a tray notification after instant capture</value>
+  </data>
+  <data name="Settings_GeneralSection" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_AutoStart" xml:space="preserve">
+    <value>Start with Windows</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_LangSystem" xml:space="preserve">
+    <value>System (auto)</value>
+  </data>
+  <data name="Settings_HkShortInstant" xml:space="preserve">
+    <value>Instant capture</value>
+  </data>
+  <data name="Settings_HkShortNote" xml:space="preserve">
+    <value>Capture+memo</value>
+  </data>
+  <data name="Settings_HkShortRegion" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="Settings_HkShortWindow" xml:space="preserve">
+    <value>Active window</value>
+  </data>
+  <data name="Settings_HkShortInbox" xml:space="preserve">
+    <value>Inbox</value>
+  </data>
+  <data name="Settings_InvalidHotkeyFormat" xml:space="preserve">
+    <value>Invalid hotkey: {0}
+Example: Ctrl+Alt+S</value>
+  </data>
+  <data name="Settings_AutoStartLockedTip" xml:space="preserve">
+    <value>Enable ShotLog in Task Manager &gt; Startup apps.</value>
+  </data>
+  <data name="Export_Untitled" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+  <data name="Sidecar_Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Notify_SavedFormat" xml:space="preserve">
+    <value>{0} · {1} saved (add note {2})</value>
+  </data>
+</root>

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Media;
 using ShotLog.Infrastructure;
 using ShotLog.Models;
+using ShotLog.Resources;
 
 namespace ShotLog.Compose;
 
@@ -27,7 +28,7 @@ public sealed class ComposeItemVM : INotifyPropertyChanged
         get
         {
             var m = Record.Memo?.Trim();
-            if (string.IsNullOrEmpty(m)) return "(메모 없음)";
+            if (string.IsNullOrEmpty(m)) return Strings.Compose_NoMemo;
             int nl = m.IndexOfAny(new[] { '\r', '\n' });
             if (nl >= 0) m = m[..nl];
             return m.Length > 60 ? m[..60] + "…" : m;

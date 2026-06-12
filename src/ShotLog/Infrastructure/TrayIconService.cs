@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using ShotLog.Resources;
 
 namespace ShotLog.Infrastructure;
 
@@ -52,19 +53,29 @@ public sealed class TrayIconService : IDisposable
         _icon.ShowBalloonTip(2500);
     }
 
+    /// <summary>Rebuilds the context menu with current resource strings (e.g. after a language change).</summary>
+    public void RebuildMenu()
+    {
+        var old = _icon.ContextMenuStrip;
+        _icon.ContextMenuStrip = BuildMenu();
+        old?.Dispose();
+    }
+
     private ContextMenuStrip BuildMenu()
     {
+        // '&' is a mnemonic prefix in WinForms menus; double it so it renders literally.
+        static string M(string s) => s.Replace("&", "&&");
         var menu = new ContextMenuStrip();
-        menu.Items.Add(new ToolStripMenuItem("활성 모니터 캡처", null, (_, __) => CaptureMonitorRequested?.Invoke(this, EventArgs.Empty)));
-        menu.Items.Add(new ToolStripMenuItem("캡처 + 메모", null, (_, __) => CaptureNoteRequested?.Invoke(this, EventArgs.Empty)));
-        menu.Items.Add(new ToolStripMenuItem("영역 선택 캡처", null, (_, __) => CaptureRegionRequested?.Invoke(this, EventArgs.Empty)));
-        menu.Items.Add(new ToolStripMenuItem("활성 창 캡처", null, (_, __) => CaptureWindowRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_CaptureMonitor), null, (_, __) => CaptureMonitorRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_CaptureNote), null, (_, __) => CaptureNoteRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_CaptureRegion), null, (_, __) => CaptureRegionRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_CaptureWindow), null, (_, __) => CaptureWindowRequested?.Invoke(this, EventArgs.Empty)));
         menu.Items.Add(new ToolStripSeparator());
-        menu.Items.Add(new ToolStripMenuItem("인박스", null, (_, __) => InboxRequested?.Invoke(this, EventArgs.Empty)));
-        menu.Items.Add(new ToolStripMenuItem("글쓰기 내보내기", null, (_, __) => ComposeRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_Inbox), null, (_, __) => InboxRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_Compose), null, (_, __) => ComposeRequested?.Invoke(this, EventArgs.Empty)));
         menu.Items.Add(new ToolStripSeparator());
-        menu.Items.Add(new ToolStripMenuItem("설정", null, (_, __) => SettingsRequested?.Invoke(this, EventArgs.Empty)));
-        menu.Items.Add(new ToolStripMenuItem("종료", null, (_, __) => ExitRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_Settings), null, (_, __) => SettingsRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_Exit), null, (_, __) => ExitRequested?.Invoke(this, EventArgs.Empty)));
         return menu;
     }
 

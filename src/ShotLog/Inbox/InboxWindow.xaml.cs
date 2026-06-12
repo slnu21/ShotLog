@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ShotLog.Infrastructure;
+using ShotLog.Resources;
 
 namespace ShotLog.Inbox;
 
@@ -48,7 +49,7 @@ public partial class InboxWindow : Window
     private void BuildPresetFilter()
     {
         PresetFilter.Children.Clear();
-        AddFilterChip("전체", null);
+        AddFilterChip(Strings.Common_All, null);
         foreach (var p in _settings.Current.Presets)
             AddFilterChip(p.Name, p.Id);
     }
@@ -79,9 +80,7 @@ public partial class InboxWindow : Window
             (_presetFilterId == null || vm.Record.PresetId == _presetFilterId) && vm.Matches(q)).ToList();
         List.ItemsSource = view;
         EmptyHint.Visibility = view.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-        EmptyHint.Text = _all.Count == 0
-            ? "아직 캡처가 없습니다. 단축키로 캡처해 보세요."
-            : "조건에 맞는 캡처가 없습니다.";
+        EmptyHint.Text = _all.Count == 0 ? Strings.Inbox_Empty : Strings.Inbox_NoMatch;
     }
 
     private void OnSearchChanged(object sender, TextChangedEventArgs e) => ApplyFilter();
@@ -103,7 +102,7 @@ public partial class InboxWindow : Window
     {
         if (((FrameworkElement)sender).Tag is not InboxItemVM vm) return;
         var r = MessageBox.Show(this,
-            $"이 캡처를 삭제할까요?\n{vm.FileName}\n\n이미지 파일도 함께 삭제됩니다.",
+            string.Format(Strings.Inbox_DeleteConfirmFormat, vm.FileName),
             "ShotLog", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
         if (r != MessageBoxResult.OK) return;
 
