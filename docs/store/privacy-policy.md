@@ -24,7 +24,7 @@ title: ShotLog 개인정보처리방침 / Privacy Policy
 **권한**
 - ShotLog는 화면 캡처를 위해 화면 내용을 읽고, 캡처는 항상 사용자의 단축키/메뉴 조작으로만 시작됩니다. 캡처 후 트레이 알림으로 저장을 알립니다.
 
-**문의**: [연락처 이메일]
+**문의**: raltlsdn@naver.com
 
 ---
 
@@ -44,4 +44,4 @@ title: ShotLog 개인정보처리방침 / Privacy Policy
 **Permissions**
 - ShotLog reads screen content to take screenshots. Captures are always initiated by your own hotkey/menu action, and a tray notification confirms each save.
 
-**Contact:** [contact email]
+**Contact:** raltlsdn@naver.com
