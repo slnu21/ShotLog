@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ShotLog MSIX package manifest.
+
+  Identity Name/Publisher below are the values assigned for this product in Partner Center
+  (Product → Product identity). Keep them in sync if the product registration ever changes.
+  For LOCAL sideload testing, sign with a self-signed cert whose subject equals the Publisher below.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap5 rescap">
+
+  <Identity
+    Name="SlnU.ShotLog"
+    Publisher="CN=1398342C-A2D7-4B4A-BFE2-34D8CCFD7FBA"
+    Version="1.0.0.0" />
+
+  <Properties>
+    <DisplayName>ShotLog</DisplayName>
+    <PublisherDisplayName>SlnU</PublisherDisplayName>
+    <Logo>Images\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="ko-kr" />
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <!-- The referenced self-contained .NET app is harvested into a "ShotLog\" subfolder of the
+         package (exe + all dependency DLLs together), so executable paths are package-relative
+         to that subfolder. -->
+    <Application Id="ShotLog" Executable="ShotLog\ShotLog.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="ShotLog"
+        Description="화면을 캡처하고 메모를 붙여 Markdown으로 정리하는 트레이 도구"
+        BackgroundColor="#0D1117"
+        Square150x150Logo="Images\Square150x150Logo.png"
+        Square44x44Logo="Images\Square44x44Logo.png">
+        <uap:DefaultTile
+          Wide310x150Logo="Images\Wide310x150Logo.png"
+          Square71x71Logo="Images\Square71x71Logo.png"
+          Square310x310Logo="Images\Square310x310Logo.png" />
+        <uap:SplashScreen Image="Images\SplashScreen.png" BackgroundColor="#0D1117" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <!-- "Start with Windows" for the packaged build. TaskId must match AutoStartService.TaskId. -->
+        <uap5:Extension
+          Category="windows.startupTask"
+          Executable="ShotLog\ShotLog.exe"
+          EntryPoint="Windows.FullTrustApplication">
+          <uap5:StartupTask
+            TaskId="ShotLogStartup"
+            Enabled="false"
+            DisplayName="ShotLog" />
+        </uap5:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- Full-trust desktop app: grants normal Win32 file access (Pictures/Documents/user-chosen
+         folders) via Medium IL, so no picturesLibrary/broadFileSystemAccess is needed. -->
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

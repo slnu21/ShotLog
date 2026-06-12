@@ -1,0 +1,19 @@
+## .NET / Visual Studio build output
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+
+## MSIX packaging output (build artifacts, not source)
+AppPackages/
+BundleArtifacts/
+*.msix
+*.msixbundle
+*.msixupload
+*.appx
+*.appxbundle
+*.appxsym
+
+## Local signing / sideload test artifacts (private keys must never be committed)
+*.cer
+*.pfx

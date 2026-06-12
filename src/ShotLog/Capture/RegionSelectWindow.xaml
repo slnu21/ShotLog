@@ -1,0 +1,25 @@
+<Window x:Class="ShotLog.Capture.RegionSelectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ShotLog — 영역 선택" Icon="/Assets/shotlog.ico"
+        WindowStyle="None" AllowsTransparency="True" Background="#01000000"
+        ShowInTaskbar="False" Topmost="True" ResizeMode="NoResize"
+        WindowStartupLocation="Manual" Cursor="Cross">
+  <Grid>
+    <!-- dim base -->
+    <Image x:Name="ShotDim" Stretch="Fill" Opacity="0.45"/>
+    <!-- bright copy revealed only inside the selection (Clip set in code) -->
+    <Image x:Name="ShotBright" Stretch="Fill"/>
+    <!-- input + selection rectangle -->
+    <Canvas x:Name="Surface" Background="Transparent"
+            MouseLeftButtonDown="OnDown" MouseMove="OnMove" MouseLeftButtonUp="OnUp">
+      <Rectangle x:Name="Sel" Stroke="#FF5AA0FF" StrokeThickness="1.5"
+                 Fill="#202F6FE0" Visibility="Collapsed"/>
+      <Border x:Name="Hint" Background="#CC0B1220" BorderBrush="#FF2A3A55" BorderThickness="1"
+              CornerRadius="9" Padding="14,9" Canvas.Left="24" Canvas.Top="24">
+        <TextBlock Foreground="#FFCFE3FF" FontSize="13"
+                   Text="드래그하여 영역 선택 · Esc 취소"/>
+      </Border>
+    </Canvas>
+  </Grid>
+</Window>

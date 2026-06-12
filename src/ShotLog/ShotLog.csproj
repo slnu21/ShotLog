@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- 10.0.19041 enables OS-provided WinRT projections; runtime floor stays at 17763. -->
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>ShotLog</AssemblyName>
+    <RootNamespace>ShotLog</RootNamespace>
+    <!-- WFAC010 is a WinForms-only analyzer suggestion that does not apply to our WPF-first host. -->
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+    <Version>1.0.0.0</Version>
+    <!-- Enables the self-contained win-x64 MSIX build driven by ShotLog.Package.wapproj
+         (restore must produce a net8.0-windows.../win-x64 asset; see NETSDK1047). RID-less
+         builds (plain dotnet build/run and the selftest flag) stay framework-dependent
+         and are unaffected. -->
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <Authors>ShotLog</Authors>
+    <Product>ShotLog</Product>
+    <!-- exe icon (Explorer/taskbar); the same file is embedded as a WPF resource for Window.Icon. -->
+    <ApplicationIcon>Assets\shotlog.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\shotlog.ico" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShotLog — UI 시안</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css">
+<style>
+  :root{
+    --bg:#0d1117; --surface:#161b22; --surface2:#1c232c; --elev:#222b36;
+    --text:#e6edf3; --muted:#8b949e; --dim:#6e7681; --border:#30363d;
+    --accent:#5aa0ff; --accent-dim:#1f3b5f; --tag:#2dd4bf; --tag-bg:#0f3b36;
+    --warn:#e3b341; --danger:#f85149; --ok:#3fb950;
+    --radius:14px; --shadow:0 18px 50px rgba(0,0,0,.55);
+    font-family:"Pretendard",system-ui,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:
+      radial-gradient(1200px 700px at 15% -10%, #15233a 0%, transparent 55%),
+      radial-gradient(1000px 600px at 110% 10%, #1a2330 0%, transparent 50%),
+      var(--bg);
+    color:var(--text); min-height:100vh; padding:28px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px; margin:0 auto}
+  h1.head{font-size:20px; font-weight:800; letter-spacing:-.3px; display:flex; align-items:center; gap:10px}
+  h1.head .dot{width:22px;height:22px;border-radius:7px;background:
+      conic-gradient(from 210deg,#5aa0ff,#2dd4bf,#7c8cff,#5aa0ff);box-shadow:0 0 18px #2dd4bf66}
+  .sub{color:var(--muted); font-size:13px; margin:6px 0 18px}
+  .tabs{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px}
+  .tab{padding:9px 15px; border-radius:10px; background:var(--surface); border:1px solid var(--border);
+    color:var(--muted); font-size:13px; font-weight:600; cursor:pointer; transition:.15s}
+  .tab:hover{color:var(--text); border-color:#3d4854}
+  .tab.active{background:linear-gradient(180deg,#23344e,#1a2740); color:#cfe3ff; border-color:var(--accent)}
+  .screen{display:none; animation:fade .25s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1;transform:none}}
+  .win{background:linear-gradient(180deg,#171d26,#12171e); border:1px solid var(--border);
+    border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
+  .titlebar{display:flex; align-items:center; gap:9px; padding:11px 14px; background:#11161dcc;
+    border-bottom:1px solid var(--border); backdrop-filter:blur(8px)}
+  .titlebar .ic{width:18px;height:18px;border-radius:5px;background:conic-gradient(from 210deg,#5aa0ff,#2dd4bf,#7c8cff,#5aa0ff)}
+  .titlebar .t{font-size:12.5px; font-weight:700; color:#cdd6e0}
+  .titlebar .sp{flex:1}
+  .wc{display:flex; gap:8px}
+  .wc i{width:12px;height:12px;border-radius:50%;background:#39414c; display:inline-block}
+  .wc i.c{background:#f85149}
+  .body{padding:18px}
+  .row{display:flex; gap:16px}
+  .label{font-size:11.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin:0 0 8px}
+  .shot{position:relative; border-radius:12px; overflow:hidden; border:1px solid #2a3340; aspect-ratio:16/10;
+    background:linear-gradient(160deg,#1b2c4a 0%,#33507e 38%,#5b6f4f 70%,#2c3a26 100%)}
+  .shot .sky{position:absolute; inset:0; background:radial-gradient(600px 200px at 70% 10%,#ffe9a866,transparent 60%)}
+  .shot .sun{position:absolute; top:14%; left:66%; width:54px;height:54px;border-radius:50%;
+    background:radial-gradient(#fff7df,#ffd66b); box-shadow:0 0 40px #ffd66b88}
+  .shot .mtn{position:absolute; bottom:30%; left:0; right:0; height:46%;
+    background:linear-gradient(180deg,#2e3f63,#26324d); clip-path:polygon(0 60%,18% 20%,34% 55%,52% 12%,70% 50%,86% 25%,100% 55%,100% 100%,0 100%)}
+  .shot .ground{position:absolute; bottom:0;left:0;right:0;height:34%;background:linear-gradient(180deg,#3a4a2c,#222e18)}
+  .shot .hud{position:absolute; left:12px; bottom:12px; display:flex; gap:8px; align-items:center}
+  .shot .hp{width:120px;height:9px;border-radius:5px;background:#0008;overflow:hidden;border:1px solid #fff3}
+  .shot .hp b{display:block;height:100%;width:72%;background:linear-gradient(90deg,#3fb950,#9ae66e)}
+  .shot .mp{width:90px;height:9px;border-radius:5px;background:#0008;overflow:hidden;border:1px solid #fff3}
+  .shot .mp b{display:block;height:100%;width:55%;background:linear-gradient(90deg,#5aa0ff,#9ec9ff)}
+  .shot .badge{position:absolute; top:10px; left:10px; font-size:11px; font-weight:700; color:#cfe3ff;
+    background:#0b1220cc; border:1px solid #2a3a55; padding:4px 9px; border-radius:8px; backdrop-filter:blur(4px)}
+  .shot .ts{position:absolute; top:10px; right:10px; font-size:11px; color:#dbe6f2; background:#0b1220cc;
+    border:1px solid #2a3a55; padding:4px 9px; border-radius:8px; font-variant-numeric:tabular-nums}
+  .maplink{display:flex; align-items:center; gap:8px; margin-top:9px; font-size:12px; color:var(--tag)}
+  .maplink code{background:var(--tag-bg); color:#7defd6; padding:2px 7px; border-radius:6px; font-size:11.5px}
+  .chips{display:flex; gap:8px; flex-wrap:wrap}
+  .chip{display:inline-flex; align-items:center; gap:7px; padding:8px 12px; border-radius:10px;
+    background:var(--surface2); border:1px solid var(--border); font-size:13px; color:#cdd6e0; cursor:pointer; transition:.15s}
+  .chip:hover{border-color:#46566a}
+  .chip .swatch{width:9px;height:9px;border-radius:50%}
+  .chip.sel{background:linear-gradient(180deg,#23344e,#1a2740); border-color:var(--accent); color:#dcebff}
+  .chip.add{border-style:dashed; color:var(--muted)}
+  .tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;background:var(--tag-bg);
+    color:#7defd6;font-size:12px;font-weight:600;border:1px solid #18504a}
+  .tag b{color:#56c9b6;cursor:pointer;font-weight:800}
+  .input{width:100%; background:#0d1219; border:1px solid var(--border); border-radius:10px; color:var(--text);
+    padding:11px 12px; font-size:13.5px; font-family:inherit}
+  .input::placeholder{color:var(--dim)}
+  textarea.input{resize:vertical; min-height:96px; line-height:1.6}
+  .hintbar{display:flex; align-items:center; gap:6px; margin-top:7px; font-size:11.5px; color:var(--dim)}
+  kbd{background:#0d1219;border:1px solid #2c3540;border-bottom-width:2px;border-radius:6px;padding:1px 6px;
+    font-size:11px;font-family:inherit;color:#aeb9c4}
+  .actions{display:flex; gap:10px; justify-content:flex-end; margin-top:16px}
+  .btn{padding:10px 18px;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid var(--border);
+    background:var(--surface2);color:#cdd6e0;transition:.15s}
+  .btn:hover{border-color:#46566a}
+  .btn.primary{background:linear-gradient(180deg,#3b82f6,#2f6fe0);border-color:#4d8ff0;color:#fff;
+    box-shadow:0 6px 18px #2f6fe055}
+  .btn.ghost{background:transparent}
+  .inbox-tools{display:flex; gap:10px; align-items:center; margin-bottom:14px}
+  .search{flex:1; display:flex; align-items:center; gap:8px; background:#0d1219; border:1px solid var(--border);
+    border-radius:10px; padding:9px 12px; color:var(--dim); font-size:13px}
+  .card{display:grid; grid-template-columns:128px 1fr auto; gap:14px; padding:12px; border:1px solid var(--border);
+    border-radius:12px; background:var(--surface); margin-bottom:11px; transition:.15s}
+  .card:hover{border-color:#3d4a59; background:#19212b}
+  .card .th{border-radius:9px; overflow:hidden; aspect-ratio:16/10; border:1px solid #2a3340}
+  .card .memo{font-size:14px; color:var(--text); margin-bottom:8px}
+  .card .memo.empty{color:var(--warn); font-style:italic}
+  .card .meta{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .pill{font-size:11.5px;color:#cdd6e0;background:var(--surface2);border:1px solid var(--border);
+    padding:3px 9px;border-radius:7px;display:inline-flex;gap:6px;align-items:center}
+  .card .right{display:flex; flex-direction:column; align-items:flex-end; gap:8px; color:var(--dim); font-size:12px}
+  .iconbtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);
+    color:#aeb9c4;cursor:pointer;font-size:14px}
+  .iconbtn:hover{border-color:#46566a;color:#fff}
+  .compose{display:grid; grid-template-columns:1fr 1fr; gap:0}
+  .pane{padding:16px}
+  .pane.left{border-right:1px solid var(--border)}
+  .filtsec{margin-bottom:16px}
+  .selitem{display:grid;grid-template-columns:22px 84px 1fr;gap:11px;align-items:center;padding:9px;border-radius:10px;
+    border:1px solid transparent}
+  .selitem:hover{background:#19212b}
+  .selitem.on{background:#16243a;border-color:#27406a}
+  .selitem .th{border-radius:7px;overflow:hidden;aspect-ratio:16/10;border:1px solid #2a3340}
+  .ck{width:18px;height:18px;border-radius:5px;border:1.5px solid #46566a;display:grid;place-items:center;color:#fff;font-size:11px}
+  .ck.on{background:var(--accent);border-color:var(--accent)}
+  .selitem .tm{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .selitem .mm{font-size:13px;color:#cdd6e0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .preview{background:#0b0f15; border:1px solid var(--border); border-radius:10px; padding:14px; font-size:12.5px;
+    line-height:1.7; color:#c5d0db; max-height:430px; overflow:auto; font-family:Consolas,monospace; white-space:pre-wrap}
+  .preview .h1{color:#e6edf3; font-size:15px; font-weight:700}
+  .preview .meta{color:#7d8ea0}
+  .preview .h2{color:#dcebff; font-size:13.5px; font-weight:700; margin-top:10px}
+  .preview .img{color:#5aa0ff}
+  .barbottom{display:flex; align-items:center; gap:12px; padding:14px 16px; border-top:1px solid var(--border); background:#11161dcc}
+  .seg{display:flex; background:#0d1219; border:1px solid var(--border); border-radius:10px; padding:3px}
+  .seg button{border:0;background:transparent;color:var(--muted);font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:8px;cursor:pointer;font-family:inherit}
+  .seg button.on{background:linear-gradient(180deg,#23344e,#1a2740);color:#dcebff}
+  .path{flex:1;font-size:11.5px;color:var(--dim);font-family:ui-monospace,monospace}
+  .sgroup{border:1px solid var(--border);border-radius:12px;background:var(--surface);margin-bottom:14px;overflow:hidden}
+  .sgroup .gt{padding:12px 15px;border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:#cdd6e0;background:#11161d}
+  .srow{display:flex;align-items:center;gap:12px;padding:12px 15px;border-bottom:1px solid #1d242e}
+  .srow:last-child{border-bottom:0}
+  .srow .k{font-size:13px;color:var(--text)}
+  .srow .d{font-size:11.5px;color:var(--dim);margin-top:2px}
+  .srow .sp{flex:1}
+  .toggle{width:42px;height:24px;border-radius:13px;background:#2a3340;position:relative;cursor:pointer;border:1px solid var(--border)}
+  .toggle.on{background:#2f6fe0;border-color:#4d8ff0}
+  .toggle b{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.18s}
+  .toggle.on b{left:21px}
+  .folderpath{font-family:ui-monospace,monospace;font-size:11.5px;color:#9fb0c2;background:#0d1219;border:1px solid var(--border);
+    border-radius:8px;padding:7px 10px}
+  .toast{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(180deg,#1b2330,#141b25);
+    border:1px solid #2a3a55;border-radius:12px;padding:13px 16px;box-shadow:var(--shadow);max-width:380px}
+  .toast .ti{width:40px;height:40px;border-radius:10px;background:linear-gradient(160deg,#33507e,#3a4a2c);flex:none}
+  .toast .tt{font-size:13px;font-weight:700}
+  .toast .ts2{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .tray{width:300px;background:#171d26;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+  .tray .tr{display:flex;align-items:center;gap:11px;padding:11px 14px;font-size:13px;color:#cdd6e0;cursor:pointer}
+  .tray .tr:hover{background:#19212b}
+  .tray .tr .ky{margin-left:auto;font-size:11px;color:var(--dim)}
+  .tray .sep{height:1px;background:var(--border);margin:5px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .note{font-size:12px;color:var(--dim);margin-top:14px;padding:11px 13px;border:1px dashed #2c3540;border-radius:10px}
+  @media(max-width:760px){.row{flex-direction:column}.compose{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="head"><span class="dot"></span>ShotLog — UI 초기 시안</h1>
+  <div class="sub">게임/작업 중 빠른 캡처 · 프리셋 폴더 선택 · 샷별 메모/태그 · 시간순 <b>표준 Markdown</b> 내보내기 &nbsp;|&nbsp; 다크 테마 고정</div>
+
+  <div class="tabs">
+    <div class="tab active" data-s="quick">① 캡처 + 메모 (QuickNote)</div>
+    <div class="tab" data-s="inbox">② 인박스</div>
+    <div class="tab" data-s="compose">③ 글쓰기 내보내기</div>
+    <div class="tab" data-s="settings">④ 설정</div>
+    <div class="tab" data-s="misc">⑤ 토스트 · 트레이</div>
+  </div>
+
+  <!-- ① QUICKNOTE -->
+  <section class="screen active" id="quick">
+    <div class="win" style="max-width:760px">
+      <div class="titlebar"><span class="ic"></span><span class="t">캡처에 메모 기록</span><span class="sp"></span>
+        <div class="wc"><i></i><i class="c"></i></div></div>
+      <div class="body">
+        <div class="row">
+          <div style="flex:1.05">
+            <div class="shot">
+              <div class="sky"></div><div class="sun"></div><div class="mtn"></div><div class="ground"></div>
+              <div class="badge">📷 활성 모니터</div><div class="ts">14:32:10</div>
+              <div class="hud"><div class="hp"><b></b></div><div class="mp"><b></b></div></div>
+            </div>
+            <div class="maplink">🔗 이 캡처에 기록 → <code>2026-06-07_14-32-10.png</code> + <code>.md</code></div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column">
+            <p class="label">저장 위치 (프리셋)</p>
+            <div class="chips" style="margin-bottom:16px">
+              <span class="chip sel"><span class="swatch" style="background:#5aa0ff"></span>게임샷</span>
+              <span class="chip"><span class="swatch" style="background:#2dd4bf"></span>작업로그</span>
+              <span class="chip"><span class="swatch" style="background:#e3b341"></span>자료수집</span>
+              <span class="chip add">+ 새 프리셋</span>
+            </div>
+            <p class="label">태그</p>
+            <div class="chips" style="margin-bottom:8px">
+              <span class="tag">발더스게이트 <b>×</b></span>
+              <span class="tag">풍경 <b>×</b></span>
+            </div>
+            <input class="input" placeholder="태그 입력 후 Enter…">
+            <p class="label" style="margin-top:16px">메모</p>
+            <textarea class="input" placeholder="이 장면에 대한 메모…">일출 타이밍 라이팅 진짜 좋다. 스샷 보정 참고용으로 보관.</textarea>
+            <div class="hintbar"><kbd>Enter</kbd> 저장 · <kbd>Shift</kbd>+<kbd>Enter</kbd> 줄바꿈 · <kbd>Esc</kbd> 버리기</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn ghost">버리기</button>
+          <button class="btn primary">저장 (게임샷에 기록)</button>
+        </div>
+      </div>
+    </div>
+    <div class="note">화면 모서리에 뜨는 작은 카드. 입력을 위해 활성화되지만(즉시 타이핑), 게임을 끊지 않는 <b>즉시 캡처</b>는 팝업 없이 활성 프리셋에 바로 저장됩니다.</div>
+  </section>
+
+  <!-- ② INBOX -->
+  <section class="screen" id="inbox">
+    <div class="win">
+      <div class="titlebar"><span class="ic"></span><span class="t">인박스 — 최근 캡처</span><span class="sp"></span>
+        <div class="wc"><i></i><i class="c"></i></div></div>
+      <div class="body">
+        <div class="inbox-tools">
+          <div class="search">🔍 메모·태그 검색…</div>
+          <span class="pill">새로고침</span>
+          <span class="pill" style="color:#fff;border-color:#4d8ff0;background:#23344e">✍ 글쓰기 내보내기</span>
+        </div>
+        <div class="chips" style="margin-bottom:14px">
+          <span class="chip sel">전체</span><span class="chip">게임샷</span><span class="chip">작업로그</span>
+        </div>
+
+        <div class="card">
+          <div class="th"><div class="shot" style="aspect-ratio:16/10"><div class="sky"></div><div class="sun"></div><div class="mtn"></div><div class="ground"></div></div></div>
+          <div>
+            <div class="memo">일출 타이밍 라이팅 진짜 좋다. 보정 참고용.</div>
+            <div class="meta">
+              <span class="tag">발더스게이트</span><span class="tag">풍경</span>
+              <span class="pill"><span class="swatch" style="width:8px;height:8px;border-radius:50%;background:#5aa0ff"></span>게임샷</span>
+            </div>
+          </div>
+          <div class="right"><span>14:32:10</span><div style="display:flex;gap:6px"><button class="iconbtn">🗑</button></div></div>
+        </div>
+
+        <div class="card" style="border-color:#5c5326;background:#1c1a12">
+          <div class="th"><div class="shot" style="aspect-ratio:16/10;background:linear-gradient(160deg,#222e18,#3a4a2c)"></div></div>
+          <div>
+            <div class="memo empty">＋ 메모 추가 — 즉시 캡처로 저장됨 (게임 중 빠르게 찍은 샷)</div>
+            <div class="meta">
+              <span class="pill"><span class="swatch" style="width:8px;height:8px;border-radius:50%;background:#5aa0ff"></span>게임샷</span>
+              <span style="font-size:11.5px;color:var(--dim)">태그 없음</span>
+            </div>
+          </div>
+          <div class="right"><span>14:35:48</span><div style="display:flex;gap:6px"><button class="iconbtn">🗑</button></div></div>
+        </div>
+
+        <div class="card">
+          <div class="th"><div class="shot" style="aspect-ratio:16/10;background:linear-gradient(160deg,#1b2c4a,#33507e)"></div></div>
+          <div>
+            <div class="memo">결제 오류 재현 — 쿠폰 중복 적용 시 합계 음수. 버그 리포트용.</div>
+            <div class="meta">
+              <span class="tag">버그</span><span class="tag">결제</span>
+              <span class="pill"><span class="swatch" style="width:8px;height:8px;border-radius:50%;background:#2dd4bf"></span>작업로그</span>
+            </div>
+          </div>
+          <div class="right"><span>13:58:02</span><div style="display:flex;gap:6px"><button class="iconbtn">🗑</button></div></div>
+        </div>
+        <div class="note">메모·태그는 칸에서 바로 수정(LostFocus 저장). 전체화면 독점 게임은 즉시 캡처로 모아두고(노란 카드) 종료 후 메모를 채우는 운영.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ COMPOSE -->
+  <section class="screen" id="compose">
+    <div class="win">
+      <div class="titlebar"><span class="ic"></span><span class="t">글쓰기 내보내기 — 표준 Markdown</span><span class="sp"></span>
+        <div class="wc"><i></i><i class="c"></i></div></div>
+      <div class="compose">
+        <div class="pane left">
+          <div class="filtsec">
+            <p class="label">묶음 기준</p>
+            <div class="chips">
+              <span class="chip sel">태그: 발더스게이트</span>
+              <span class="chip">+ 풍경</span>
+              <span class="chip">프리셋 ▾</span>
+              <span class="chip">기간: 오늘</span>
+            </div>
+          </div>
+          <p class="label">포함할 캡처 · 시간순 (3/3)</p>
+          <div class="selitem on"><div class="ck on">✓</div><div class="th"><div class="shot" style="aspect-ratio:16/10"><div class="sky"></div><div class="sun"></div><div class="mtn"></div><div class="ground"></div></div></div><div><div class="tm">14:32:10</div><div class="mm">일출 타이밍 라이팅 진짜 좋다…</div></div></div>
+          <div class="selitem on"><div class="ck on">✓</div><div class="th"><div class="shot" style="aspect-ratio:16/10;background:linear-gradient(160deg,#222e18,#3a4a2c)"></div></div><div><div class="tm">14:35:48</div><div class="mm">보스 직전 세이브 지점</div></div></div>
+          <div class="selitem on"><div class="ck on">✓</div><div class="th"><div class="shot" style="aspect-ratio:16/10;background:linear-gradient(160deg,#2b1c4a,#503377)"></div></div><div><div class="tm">15:02:11</div><div class="mm">엔딩 분기 선택지 기록</div></div></div>
+        </div>
+        <div class="pane">
+          <p class="label">미리보기 (표준 Markdown)</p>
+          <div class="preview"><span class="h1"># 발더스게이트 플레이 기록</span>
+
+<span class="meta">_2026-06-07 · 태그: 발더스게이트, 풍경_</span>
+
+<span class="h2">## 14:32</span>
+일출 타이밍 라이팅 진짜 좋다. 보정 참고용.
+
+<span class="img">![일출 타이밍…](images/2026-06-07_14-32-10.png)</span>
+
+<span class="h2">## 14:35</span>
+보스 직전 세이브 지점.
+
+<span class="img">![보스 직전…](images/2026-06-07_14-35-48.png)</span>
+
+<span class="h2">## 15:02</span>
+엔딩 분기 선택지 기록.</div>
+        </div>
+      </div>
+      <div class="barbottom">
+        <div class="seg"><button class="on">표준 Markdown</button><button>+ YAML front matter</button></div>
+        <span class="path">→ Documents\ShotLog-export\발더스게이트-플레이-기록\…md  ·  이미지 → images\</span>
+        <button class="btn primary">생성 후 열기</button>
+      </div>
+    </div>
+    <div class="note">선택 캡처를 <b>시간 오름차순</b>으로 <code>## HH:mm → 메모 → ![](images/…)</code> 블록으로 엮고, 이미지를 <code>images/</code>로 복사 + 상대경로 참조 → GitHub·VS Code·Obsidian 어디서나 렌더. 기본 편집기로 열어 바로 글쓰기.</div>
+  </section>
+
+  <!-- ④ SETTINGS -->
+  <section class="screen" id="settings">
+    <div class="win">
+      <div class="titlebar"><span class="ic"></span><span class="t">설정</span><span class="sp"></span>
+        <div class="wc"><i></i><i class="c"></i></div></div>
+      <div class="body">
+        <div class="grid2">
+          <div>
+            <div class="sgroup">
+              <div class="gt">프리셋 (저장 위치)</div>
+              <div class="srow"><div style="flex:1"><div class="k">게임샷</div><div class="folderpath" style="margin-top:5px">D:\Captures\Games</div></div><button class="iconbtn">🗂</button></div>
+              <div class="srow"><div style="flex:1"><div class="k">작업로그</div><div class="folderpath" style="margin-top:5px">D:\Work\shots</div></div><button class="iconbtn">🗂</button></div>
+              <div class="srow"><span class="chip add" style="padding:7px 12px">+ 프리셋 추가</span></div>
+            </div>
+            <div class="sgroup">
+              <div class="gt">단축키</div>
+              <div class="srow"><div class="k">즉시 캡처 → 활성 프리셋</div><span class="sp"></span><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd></div>
+              <div class="srow"><div class="k">캡처 + 메모</div><span class="sp"></span><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>D</kbd></div>
+              <div class="srow"><div class="k">영역 선택 캡처</div><span class="sp"></span><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>R</kbd></div>
+              <div class="srow"><div class="k">활성 창 캡처</div><span class="sp"></span><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>W</kbd></div>
+              <div class="srow"><div class="k">인박스 열기</div><span class="sp"></span><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd></div>
+            </div>
+          </div>
+          <div>
+            <div class="sgroup">
+              <div class="gt">내보내기</div>
+              <div class="srow"><div><div class="k">기본 출력 폴더</div><div class="d">표준 Markdown + images/ 복사</div></div></div>
+              <div class="srow"><div class="folderpath" style="flex:1">C:\Users\…\Documents\ShotLog-export</div></div>
+              <div class="srow"><div><div class="k">PNG 옆 사이드카 .md 생성</div><div class="d">탐색기에서도 같은 이름으로 메모 확인</div></div><span class="sp"></span><div class="toggle on"><b></b></div></div>
+              <div class="srow"><div><div class="k">즉시 캡처 후 트레이 알림</div></div><span class="sp"></span><div class="toggle on"><b></b></div></div>
+            </div>
+            <div class="sgroup">
+              <div class="gt">일반</div>
+              <div class="srow"><div><div class="k">Windows 시작 시 자동 실행</div></div><span class="sp"></span><div class="toggle"><b></b></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ MISC -->
+  <section class="screen" id="misc">
+    <div class="grid2">
+      <div>
+        <p class="label">즉시 캡처 토스트 (우하단)</p>
+        <div class="toast">
+          <div class="ti"></div>
+          <div><div class="tt">📸 게임샷에 저장됨</div><div class="ts2">2026-06-07_14-32-10.png · 메모 추가 <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>D</kbd></div></div>
+        </div>
+        <div class="note">v1은 트레이 풍선 알림으로 표시(포커스 비탈취). 게임 진행 중에도 방해 없이 "저장됨 + 메모 단축키" 안내.</div>
+      </div>
+      <div>
+        <p class="label">트레이 우클릭 메뉴</p>
+        <div class="tray">
+          <div class="tr">📷 활성 모니터 캡처<span class="ky">Ctrl+Alt+S</span></div>
+          <div class="tr">📝 캡처 + 메모<span class="ky">Ctrl+Alt+D</span></div>
+          <div class="tr">⬚ 영역 선택<span class="ky">Ctrl+Alt+R</span></div>
+          <div class="tr">🪟 활성 창<span class="ky">Ctrl+Alt+W</span></div>
+          <div class="sep"></div>
+          <div class="tr">🗂 인박스<span class="ky">Ctrl+Alt+I</span></div>
+          <div class="tr">✍ 글쓰기 내보내기</div>
+          <div class="sep"></div>
+          <div class="tr">⚙ 설정</div>
+          <div class="tr">⏻ 종료</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.s).classList.add('active');
+  });
+</script>
+</body>
+</html>
