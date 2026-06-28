@@ -33,4 +33,10 @@
     <Resource Include="Assets\shotlog.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Rendered Markdown preview in the Compose window. Uses the Evergreen WebView2 runtime
+         (preinstalled on Windows 11); the text preview degrades gracefully if it is missing. -->
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3912.50" />
+  </ItemGroup>
+
 </Project>

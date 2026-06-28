@@ -25,6 +25,15 @@ public sealed class InboxItemVM : INotifyPropertyChanged
     }
 
     public CaptureRecord Record => _r;
+
+    private bool _selected;
+    /// <summary>Checkbox state for multi-select delete.</summary>
+    public bool Selected
+    {
+        get => _selected;
+        set { if (_selected == value) return; _selected = value; OnChanged(nameof(Selected)); }
+    }
+
     public ImageSource? Thumb { get; }
     public bool ThumbMissing => Thumb == null;
     public string ImagePath => _r.ImagePath;

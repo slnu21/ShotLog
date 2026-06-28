@@ -82,6 +82,18 @@
   <data name="Common_DefaultPreset" xml:space="preserve">
     <value>Default</value>
   </data>
+  <data name="Common_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Common_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
   <data name="Tray_CaptureMonitor" xml:space="preserve">
     <value>Capture Active Monitor</value>
   </data>
@@ -93,6 +105,9 @@
   </data>
   <data name="Tray_CaptureWindow" xml:space="preserve">
     <value>Capture Active Window</value>
+  </data>
+  <data name="Tray_CaptureClipboard" xml:space="preserve">
+    <value>Capture to Clipboard</value>
   </data>
   <data name="Tray_Inbox" xml:space="preserve">
     <value>Inbox</value>
@@ -129,6 +144,9 @@
   </data>
   <data name="QuickNote_SaveFailed" xml:space="preserve">
     <value>Save failed: </value>
+  </data>
+  <data name="QuickNote_Annotate" xml:space="preserve">
+    <value>✎ Edit</value>
   </data>
   <data name="Region_Title" xml:space="preserve">
     <value>ShotLog — Select Region</value>
@@ -187,6 +205,24 @@
   <data name="Compose_GeneratedStatusFormat" xml:space="preserve">
     <value>Generated: {0} · {1} image(s)</value>
   </data>
+  <data name="Compose_RenderedPreview" xml:space="preserve">
+    <value>Rendered preview</value>
+  </data>
+  <data name="Compose_WebViewMissing" xml:space="preserve">
+    <value>The WebView2 runtime is not installed, so the rendered preview is unavailable. The text preview on the left still works.</value>
+  </data>
+  <data name="Compose_CopyMarkdown" xml:space="preserve">
+    <value>Copy Markdown</value>
+  </data>
+  <data name="Compose_ExportHtml" xml:space="preserve">
+    <value>Export HTML</value>
+  </data>
+  <data name="Compose_CopiedStatus" xml:space="preserve">
+    <value>Copied Markdown to the clipboard.</value>
+  </data>
+  <data name="Compose_HtmlGeneratedFormat" xml:space="preserve">
+    <value>HTML generated: {0}</value>
+  </data>
   <data name="Inbox_Title" xml:space="preserve">
     <value>ShotLog — Inbox</value>
   </data>
@@ -213,6 +249,29 @@
 {0}
 
 The image file will be deleted too.</value>
+  </data>
+  <data name="Inbox_DeleteTitle" xml:space="preserve">
+    <value>Delete capture</value>
+  </data>
+  <data name="Inbox_Annotate" xml:space="preserve">
+    <value>✎ Annotate</value>
+  </data>
+  <data name="Inbox_CopyButton" xml:space="preserve">
+    <value>📋 Copy</value>
+  </data>
+  <data name="Inbox_OpenButton" xml:space="preserve">
+    <value>📂 Folder</value>
+  </data>
+  <data name="Inbox_DeleteSelected" xml:space="preserve">
+    <value>🗑 Delete selected</value>
+  </data>
+  <data name="Inbox_DeleteSelectedConfirmFormat" xml:space="preserve">
+    <value>Delete the {0} selected capture(s)?
+
+Their image files will be deleted too.</value>
+  </data>
+  <data name="Inbox_NoneSelected" xml:space="preserve">
+    <value>No captures are selected.</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>ShotLog — Settings</value>
@@ -252,6 +311,9 @@ The image file will be deleted too.</value>
   </data>
   <data name="Settings_HkInbox" xml:space="preserve">
     <value>Open Inbox</value>
+  </data>
+  <data name="Settings_HkClipboard" xml:space="preserve">
+    <value>Capture to clipboard</value>
   </data>
   <data name="Settings_HotkeyHint" xml:space="preserve">
     <value>Format: Ctrl+Alt+S, Ctrl+Shift+1 …  (applies on save)</value>
@@ -295,12 +357,54 @@ The image file will be deleted too.</value>
   <data name="Settings_HkShortInbox" xml:space="preserve">
     <value>Inbox</value>
   </data>
+  <data name="Settings_HkShortClipboard" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
   <data name="Settings_InvalidHotkeyFormat" xml:space="preserve">
     <value>Invalid hotkey: {0}
 Example: Ctrl+Alt+S</value>
   </data>
   <data name="Settings_AutoStartLockedTip" xml:space="preserve">
     <value>Enable ShotLog in Task Manager &gt; Startup apps.</value>
+  </data>
+  <data name="Annot_Title" xml:space="preserve">
+    <value>ShotLog — Annotate</value>
+  </data>
+  <data name="Annot_Select" xml:space="preserve">
+    <value>Move / select</value>
+  </data>
+  <data name="Annot_Pen" xml:space="preserve">
+    <value>Pen</value>
+  </data>
+  <data name="Annot_Highlighter" xml:space="preserve">
+    <value>Highlighter</value>
+  </data>
+  <data name="Annot_Arrow" xml:space="preserve">
+    <value>Arrow</value>
+  </data>
+  <data name="Annot_Rect" xml:space="preserve">
+    <value>Rectangle</value>
+  </data>
+  <data name="Annot_Text" xml:space="preserve">
+    <value>Text box</value>
+  </data>
+  <data name="Annot_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="Annot_Clear" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
+  <data name="Annot_Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="Annot_Width" xml:space="preserve">
+    <value>Thickness</value>
+  </data>
+  <data name="Annot_TextWatermark" xml:space="preserve">
+    <value>Type text…</value>
+  </data>
+  <data name="Dialog_Title" xml:space="preserve">
+    <value>ShotLog</value>
   </data>
   <data name="Export_Untitled" xml:space="preserve">
     <value>Untitled</value>
@@ -310,5 +414,8 @@ Example: Ctrl+Alt+S</value>
   </data>
   <data name="Notify_SavedFormat" xml:space="preserve">
     <value>{0} · {1} saved (add note {2})</value>
+  </data>
+  <data name="Notify_Clipboard" xml:space="preserve">
+    <value>Captured to the clipboard.</value>
   </data>
 </root>

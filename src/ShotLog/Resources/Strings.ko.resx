@@ -82,6 +82,18 @@
   <data name="Common_DefaultPreset" xml:space="preserve">
     <value>기본</value>
   </data>
+  <data name="Common_OK" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="Common_Done" xml:space="preserve">
+    <value>완료</value>
+  </data>
+  <data name="Common_Copy" xml:space="preserve">
+    <value>복사</value>
+  </data>
   <data name="Tray_CaptureMonitor" xml:space="preserve">
     <value>활성 모니터 캡처</value>
   </data>
@@ -93,6 +105,9 @@
   </data>
   <data name="Tray_CaptureWindow" xml:space="preserve">
     <value>활성 창 캡처</value>
+  </data>
+  <data name="Tray_CaptureClipboard" xml:space="preserve">
+    <value>클립보드로 캡처</value>
   </data>
   <data name="Tray_Inbox" xml:space="preserve">
     <value>인박스</value>
@@ -129,6 +144,9 @@
   </data>
   <data name="QuickNote_SaveFailed" xml:space="preserve">
     <value>저장 실패: </value>
+  </data>
+  <data name="QuickNote_Annotate" xml:space="preserve">
+    <value>✎ 편집</value>
   </data>
   <data name="Region_Title" xml:space="preserve">
     <value>ShotLog — 영역 선택</value>
@@ -187,6 +205,24 @@
   <data name="Compose_GeneratedStatusFormat" xml:space="preserve">
     <value>생성됨: {0} · 이미지 {1}장</value>
   </data>
+  <data name="Compose_RenderedPreview" xml:space="preserve">
+    <value>렌더링 미리보기</value>
+  </data>
+  <data name="Compose_WebViewMissing" xml:space="preserve">
+    <value>WebView2 런타임이 설치되어 있지 않아 렌더링 미리보기를 표시할 수 없습니다. 왼쪽 텍스트 미리보기는 그대로 사용할 수 있습니다.</value>
+  </data>
+  <data name="Compose_CopyMarkdown" xml:space="preserve">
+    <value>MD 복사</value>
+  </data>
+  <data name="Compose_ExportHtml" xml:space="preserve">
+    <value>HTML 내보내기</value>
+  </data>
+  <data name="Compose_CopiedStatus" xml:space="preserve">
+    <value>마크다운을 클립보드에 복사했습니다.</value>
+  </data>
+  <data name="Compose_HtmlGeneratedFormat" xml:space="preserve">
+    <value>HTML 생성됨: {0}</value>
+  </data>
   <data name="Inbox_Title" xml:space="preserve">
     <value>ShotLog — 인박스</value>
   </data>
@@ -213,6 +249,29 @@
 {0}
 
 이미지 파일도 함께 삭제됩니다.</value>
+  </data>
+  <data name="Inbox_DeleteTitle" xml:space="preserve">
+    <value>캡처 삭제</value>
+  </data>
+  <data name="Inbox_Annotate" xml:space="preserve">
+    <value>✎ 주석</value>
+  </data>
+  <data name="Inbox_CopyButton" xml:space="preserve">
+    <value>📋 복사</value>
+  </data>
+  <data name="Inbox_OpenButton" xml:space="preserve">
+    <value>📂 탐색기</value>
+  </data>
+  <data name="Inbox_DeleteSelected" xml:space="preserve">
+    <value>🗑 선택 삭제</value>
+  </data>
+  <data name="Inbox_DeleteSelectedConfirmFormat" xml:space="preserve">
+    <value>선택한 캡처 {0}개를 삭제할까요?
+
+이미지 파일도 함께 삭제됩니다.</value>
+  </data>
+  <data name="Inbox_NoneSelected" xml:space="preserve">
+    <value>선택된 캡처가 없습니다.</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>ShotLog — 설정</value>
@@ -252,6 +311,9 @@
   </data>
   <data name="Settings_HkInbox" xml:space="preserve">
     <value>인박스 열기</value>
+  </data>
+  <data name="Settings_HkClipboard" xml:space="preserve">
+    <value>클립보드로 캡처</value>
   </data>
   <data name="Settings_HotkeyHint" xml:space="preserve">
     <value>형식: Ctrl+Alt+S, Ctrl+Shift+1 …  (변경은 저장 시 적용)</value>
@@ -295,12 +357,54 @@
   <data name="Settings_HkShortInbox" xml:space="preserve">
     <value>인박스</value>
   </data>
+  <data name="Settings_HkShortClipboard" xml:space="preserve">
+    <value>클립보드</value>
+  </data>
   <data name="Settings_InvalidHotkeyFormat" xml:space="preserve">
     <value>올바르지 않은 단축키: {0}
 예: Ctrl+Alt+S</value>
   </data>
   <data name="Settings_AutoStartLockedTip" xml:space="preserve">
     <value>작업 관리자 &gt; 시작프로그램에서 ShotLog를 켜야 합니다.</value>
+  </data>
+  <data name="Annot_Title" xml:space="preserve">
+    <value>ShotLog — 주석</value>
+  </data>
+  <data name="Annot_Select" xml:space="preserve">
+    <value>이동 / 선택</value>
+  </data>
+  <data name="Annot_Pen" xml:space="preserve">
+    <value>펜</value>
+  </data>
+  <data name="Annot_Highlighter" xml:space="preserve">
+    <value>형광펜</value>
+  </data>
+  <data name="Annot_Arrow" xml:space="preserve">
+    <value>화살표</value>
+  </data>
+  <data name="Annot_Rect" xml:space="preserve">
+    <value>사각형</value>
+  </data>
+  <data name="Annot_Text" xml:space="preserve">
+    <value>텍스트 상자</value>
+  </data>
+  <data name="Annot_Undo" xml:space="preserve">
+    <value>실행취소</value>
+  </data>
+  <data name="Annot_Clear" xml:space="preserve">
+    <value>모두 지우기</value>
+  </data>
+  <data name="Annot_Color" xml:space="preserve">
+    <value>색상</value>
+  </data>
+  <data name="Annot_Width" xml:space="preserve">
+    <value>굵기</value>
+  </data>
+  <data name="Annot_TextWatermark" xml:space="preserve">
+    <value>텍스트 입력…</value>
+  </data>
+  <data name="Dialog_Title" xml:space="preserve">
+    <value>ShotLog</value>
   </data>
   <data name="Export_Untitled" xml:space="preserve">
     <value>제목 없음</value>
@@ -310,5 +414,8 @@
   </data>
   <data name="Notify_SavedFormat" xml:space="preserve">
     <value>{0} · {1} 저장됨 (메모 추가 {2})</value>
+  </data>
+  <data name="Notify_Clipboard" xml:space="preserve">
+    <value>클립보드에 캡처했습니다.</value>
   </data>
 </root>

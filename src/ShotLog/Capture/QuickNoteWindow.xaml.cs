@@ -8,6 +8,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ShotLog.Dialogs;
 using ShotLog.Infrastructure;
 using ShotLog.Models;
 using ShotLog.Resources;
@@ -20,7 +21,7 @@ namespace ShotLog.Capture;
 /// </summary>
 public partial class QuickNoteWindow : Window
 {
-    private readonly System.Drawing.Bitmap _bmp;
+    private System.Drawing.Bitmap _bmp;   // swapped (old disposed) when annotated
     private readonly SettingsStore _settings;
     private readonly CaptureStore _captures;
     private readonly List<string> _tags = new();
@@ -204,7 +205,21 @@ public partial class QuickNoteWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, Strings.QuickNote_SaveFailed + ex.Message, "ShotLog", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageWindow.Alert(this, Strings.QuickNote_SaveFailed + ex.Message, Strings.Dialog_Title, DialogKind.Error);
+        }
+    }
+
+    private void OnCopy(object sender, RoutedEventArgs e) => ClipboardHelper.CopyImage(_bmp);
+
+    private void OnAnnotate(object sender, RoutedEventArgs e)
+    {
+        var win = new AnnotationWindow(_bmp) { Owner = this };
+        if (win.ShowDialog() == true && win.Result != null)
+        {
+            var old = _bmp;
+            _bmp = win.Result;                       // take ownership of the annotated bitmap
+            Preview.Source = ImageHelper.ToBitmapSource(_bmp);
+            old.Dispose();                           // dispose the previous one exactly once
         }
     }
 

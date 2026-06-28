@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
+using Microsoft.Web.WebView2.Core;
+using ShotLog.Dialogs;
 using ShotLog.Infrastructure;
 using ShotLog.Models;
 using ShotLog.Resources;
@@ -23,16 +29,29 @@ public partial class ComposeWindow : Window
     private string _dateMode = "all";
     private List<ComposeItemVM> _items = new();
 
+    // Rendered (WebView2) preview state. The data-URI cache keeps title keystrokes from re-encoding images.
+    private readonly Dictionary<string, string?> _dataUriCache = new();
+    private readonly DispatcherTimer _renderTimer;
+    private bool _webReady;
+    private int _renderSeq;
+    private string? _previewFile;
+
     public ComposeWindow(SettingsStore settings, CaptureStore captures)
     {
         InitializeComponent();
         _settings = settings;
         _captures = captures;
         WindowChrome.ApplyDarkTitleBar(this);
+
+        _renderTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(160) };
+        _renderTimer.Tick += (_, __) => { _renderTimer.Stop(); RenderHtmlPreview(); };
+        Loaded += async (_, __) => await InitWebViewAsync();
+        Closed += (_, __) => CleanupWebView();
     }
 
     public void ReloadData()
     {
+        _dataUriCache.Clear();   // images may have changed (e.g. annotated) since last open
         if (string.IsNullOrWhiteSpace(OutputBox.Text)) OutputBox.Text = App.ExportRoot();
         if (string.IsNullOrWhiteSpace(TitleBox.Text))
             TitleBox.Text = string.Format(Strings.Compose_DefaultTitleFormat, DateTimeOffset.Now.ToString("yyyy-MM-dd"));
@@ -140,7 +159,78 @@ public partial class ComposeWindow : Window
         var selected = _items.Where(i => i.Selected).Select(i => i.Record).ToList();
         CountLabel.Text = string.Format(Strings.Compose_CountFormat, selected.Count, _items.Count);
         PreviewBox.Text = MarkdownExporter.BuildPreview(selected, TitleBox.Text, FrontMatterBox.IsChecked == true);
-        GenerateBtn.IsEnabled = selected.Count > 0;
+        GenerateBtn.IsEnabled = CopyMdBtn.IsEnabled = HtmlBtn.IsEnabled = selected.Count > 0;
+        QueueRender();
+    }
+
+    // ---- rendered (WebView2) preview ----
+
+    private static string WebViewDir() => Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ShotLog", "webview2");
+
+    private async Task InitWebViewAsync()
+    {
+        try
+        {
+            string udf = WebViewDir();
+            Directory.CreateDirectory(udf);
+            var env = await CoreWebView2Environment.CreateAsync(null, udf);
+            await RenderView.EnsureCoreWebView2Async(env);
+            var s = RenderView.CoreWebView2.Settings;
+            s.AreDevToolsEnabled = false;
+            s.AreDefaultContextMenusEnabled = false;
+            s.IsStatusBarEnabled = false;
+            s.IsZoomControlEnabled = false;
+            _webReady = true;
+            RenderHtmlPreview();
+        }
+        catch
+        {
+            // WebView2 runtime missing or init failed → keep the text preview, show a hint.
+            RenderView.Visibility = Visibility.Collapsed;
+            WebMissingHint.Visibility = Visibility.Visible;
+        }
+    }
+
+    private void QueueRender()
+    {
+        if (_renderTimer == null) return;
+        _renderTimer.Stop();
+        _renderTimer.Start();
+    }
+
+    private string? DataUriFor(string path)
+    {
+        if (_dataUriCache.TryGetValue(path, out var v)) return v;
+        v = ImageHelper.ToDataUri(path, 900);
+        _dataUriCache[path] = v;
+        return v;
+    }
+
+    private void RenderHtmlPreview()
+    {
+        if (!_webReady) return;
+        try
+        {
+            var selected = _items.Where(i => i.Selected).Select(i => i.Record).ToList();
+            string html = MarkdownExporter.BuildHtmlPreview(selected, TitleBox.Text, FrontMatterBox.IsChecked == true, DataUriFor);
+
+            // Navigate to a fresh temp file rather than NavigateToString (which caps at ~2 MB; base64 images blow past it).
+            string dir = Path.Combine(WebViewDir(), "tmp");
+            Directory.CreateDirectory(dir);
+            string? prev = _previewFile;
+            _previewFile = Path.Combine(dir, $"preview-{_renderSeq++}.html");
+            File.WriteAllText(_previewFile, html, new UTF8Encoding(false));
+            RenderView.CoreWebView2.Navigate(new Uri(_previewFile).AbsoluteUri);
+            if (prev != null) { try { File.Delete(prev); } catch { /* best-effort */ } }
+        }
+        catch { /* preview is best-effort, never blocks export */ }
+    }
+
+    private void CleanupWebView()
+    {
+        try { RenderView.Dispose(); } catch { }
+        try { if (_previewFile != null && File.Exists(_previewFile)) File.Delete(_previewFile); } catch { }
     }
 
     private void OnBrowse(object sender, RoutedEventArgs e)
@@ -151,12 +241,44 @@ public partial class ComposeWindow : Window
             OutputBox.Text = dlg.SelectedPath;
     }
 
+    private void OnCopyMarkdown(object sender, RoutedEventArgs e)
+    {
+        var selected = _items.Where(i => i.Selected).Select(i => i.Record).ToList();
+        if (selected.Count == 0) return;
+        try
+        {
+            Clipboard.SetText(MarkdownExporter.BuildPreview(selected, TitleBox.Text, FrontMatterBox.IsChecked == true));
+            StatusLabel.Text = Strings.Compose_CopiedStatus;
+        }
+        catch { /* clipboard busy — ignore */ }
+    }
+
+    private void OnExportHtml(object sender, RoutedEventArgs e)
+    {
+        var selected = _items.Where(i => i.Selected).Select(i => i.Record).ToList();
+        if (selected.Count == 0) return;
+
+        string outputRoot = string.IsNullOrWhiteSpace(OutputBox.Text) ? App.ExportRoot() : OutputBox.Text.Trim();
+        OutputBox.Text = outputRoot;
+        try
+        {
+            string path = MarkdownExporter.ExportHtml(selected, TitleBox.Text.Trim(), outputRoot,
+                FrontMatterBox.IsChecked == true, p => ImageHelper.ToDataUri(p, 1920));
+            StatusLabel.Text = string.Format(Strings.Compose_HtmlGeneratedFormat, path);
+            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            MessageWindow.Alert(this, Strings.Compose_ExportFailed + ex.Message, Strings.Dialog_Title, DialogKind.Error);
+        }
+    }
+
     private void OnGenerate(object sender, RoutedEventArgs e)
     {
         var selected = _items.Where(i => i.Selected).Select(i => i.Record).ToList();
         if (selected.Count == 0)
         {
-            MessageBox.Show(this, Strings.Compose_SelectAtLeastOne, "ShotLog", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageWindow.Alert(this, Strings.Compose_SelectAtLeastOne, Strings.Dialog_Title, DialogKind.Info);
             return;
         }
 
@@ -171,7 +293,7 @@ public partial class ComposeWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, Strings.Compose_ExportFailed + ex.Message, "ShotLog", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageWindow.Alert(this, Strings.Compose_ExportFailed + ex.Message, Strings.Dialog_Title, DialogKind.Error);
         }
     }
 }

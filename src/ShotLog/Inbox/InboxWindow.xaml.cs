@@ -7,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using ShotLog.Capture;
+using ShotLog.Dialogs;
 using ShotLog.Infrastructure;
 using ShotLog.Resources;
 
@@ -98,13 +100,85 @@ public partial class InboxWindow : Window
         catch { /* ignore */ }
     }
 
+    private void OnAnnotate(object sender, RoutedEventArgs e)
+    {
+        if (((FrameworkElement)sender).Tag is not InboxItemVM vm) return;
+        if (!File.Exists(vm.ImagePath)) return;
+
+        System.Drawing.Bitmap src;
+        try
+        {
+            // Copy out of a temp bitmap so the PNG file handle is released immediately (allows overwrite).
+            using var tmp = new System.Drawing.Bitmap(vm.ImagePath);
+            src = new System.Drawing.Bitmap(tmp);
+        }
+        catch { return; }
+
+        using (src)
+        {
+            var win = new AnnotationWindow(src) { Owner = this };
+            if (win.ShowDialog() == true && win.Result != null)
+            {
+                using var result = win.Result;
+                try { CaptureIO.OverwritePng(result, vm.ImagePath); }
+                catch { return; }
+                ReloadList();   // rebuilds thumbnails (LoadThumb ignores the image cache)
+            }
+        }
+    }
+
+    private void OnCopy(object sender, RoutedEventArgs e)
+    {
+        if (((FrameworkElement)sender).Tag is not InboxItemVM vm) return;
+        if (!File.Exists(vm.ImagePath)) return;
+        try
+        {
+            using var bmp = new System.Drawing.Bitmap(vm.ImagePath);
+            ClipboardHelper.CopyImage(bmp);
+        }
+        catch { /* ignore */ }
+    }
+
+    private void OnOpenFolder(object sender, RoutedEventArgs e)
+    {
+        if (((FrameworkElement)sender).Tag is not InboxItemVM vm) return;
+        try
+        {
+            if (File.Exists(vm.ImagePath))
+                Process.Start(new ProcessStartInfo("explorer.exe", $"/select,\"{vm.ImagePath}\"") { UseShellExecute = true });
+        }
+        catch { /* ignore */ }
+    }
+
+    private void OnDeleteSelected(object sender, RoutedEventArgs e)
+    {
+        var sel = _all.Where(vm => vm.Selected).ToList();
+        if (sel.Count == 0)
+        {
+            MessageWindow.Alert(this, Strings.Inbox_NoneSelected, Strings.Inbox_DeleteTitle, DialogKind.Info);
+            return;
+        }
+        bool ok = MessageWindow.Confirm(this,
+            string.Format(Strings.Inbox_DeleteSelectedConfirmFormat, sel.Count),
+            Strings.Inbox_DeleteTitle, danger: true, okText: Strings.Common_Delete);
+        if (!ok) return;
+
+        foreach (var vm in sel)
+        {
+            CaptureIO.DeleteFiles(vm.ImagePath, _settings.Current.SidecarEnabled);
+            _captures.Remove(vm.Record);
+        }
+        _captures.Save();
+        ReloadList();
+    }
+
     private void OnDelete(object sender, RoutedEventArgs e)
     {
         if (((FrameworkElement)sender).Tag is not InboxItemVM vm) return;
-        var r = MessageBox.Show(this,
+        bool ok = MessageWindow.Confirm(this,
             string.Format(Strings.Inbox_DeleteConfirmFormat, vm.FileName),
-            "ShotLog", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-        if (r != MessageBoxResult.OK) return;
+            Strings.Inbox_DeleteTitle, danger: true, okText: Strings.Common_Delete);
+        if (!ok) return;
 
         CaptureIO.DeleteFiles(vm.ImagePath, _settings.Current.SidecarEnabled);
         _captures.Remove(vm.Record);

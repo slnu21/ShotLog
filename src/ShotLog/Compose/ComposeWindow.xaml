@@ -2,13 +2,16 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:res="clr-namespace:ShotLog.Resources"
-        Title="{x:Static res:Strings.Compose_Title}" Height="700" Width="1000" Icon="/Assets/shotlog.ico"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="{x:Static res:Strings.Compose_Title}" Height="720" Width="1400" MinWidth="980" Icon="/Assets/shotlog.ico"
         Background="{StaticResource Bg}" WindowStartupLocation="CenterScreen">
   <Grid Margin="18">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="1.05*"/>
+      <ColumnDefinition Width="0.7*"/>
       <ColumnDefinition Width="12"/>
       <ColumnDefinition Width="1*"/>
+      <ColumnDefinition Width="12"/>
+      <ColumnDefinition Width="1.1*"/>
     </Grid.ColumnDefinitions>
 
     <!-- ===== left: filters + selectable list ===== -->
@@ -113,8 +116,33 @@
                   VerticalAlignment="Center" Click="OnAnyChanged"/>
         <TextBlock x:Name="StatusLabel" Grid.Column="1" VerticalAlignment="Center" Margin="14,0,14,0"
                    Foreground="{StaticResource TextDim}" FontSize="11.5" TextTrimming="CharacterEllipsis"/>
-        <Button x:Name="GenerateBtn" Grid.Column="2" Content="{x:Static res:Strings.Compose_CreateAndOpen}" Style="{StaticResource BtnPrimary}" Click="OnGenerate"/>
+        <StackPanel Grid.Column="2" Orientation="Horizontal">
+          <Button x:Name="CopyMdBtn" Content="{x:Static res:Strings.Compose_CopyMarkdown}" Style="{StaticResource Btn}" Click="OnCopyMarkdown" Margin="0,0,10,0"/>
+          <Button x:Name="HtmlBtn" Content="{x:Static res:Strings.Compose_ExportHtml}" Style="{StaticResource Btn}" Click="OnExportHtml" Margin="0,0,10,0"/>
+          <Button x:Name="GenerateBtn" Content="{x:Static res:Strings.Compose_CreateAndOpen}" Style="{StaticResource BtnPrimary}" Click="OnGenerate"/>
+        </StackPanel>
       </Grid>
+    </Grid>
+
+    <GridSplitter Grid.Column="3" Width="2" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                  Background="{StaticResource Border}"/>
+
+    <!-- ===== far right: rendered Markdown preview (WebView2) ===== -->
+    <Grid Grid.Column="4">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <TextBlock Grid.Row="0" Text="{x:Static res:Strings.Compose_RenderedPreview}" Style="{StaticResource SectionLabel}"/>
+      <Border Grid.Row="1" Background="#FF0D1117" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
+        <Grid>
+          <wv2:WebView2 x:Name="RenderView"/>
+          <TextBlock x:Name="WebMissingHint" Visibility="Collapsed" Margin="20"
+                     Foreground="{StaticResource TextDim}" TextWrapping="Wrap" TextAlignment="Center"
+                     VerticalAlignment="Center" HorizontalAlignment="Center"
+                     Text="{x:Static res:Strings.Compose_WebViewMissing}"/>
+        </Grid>
+      </Border>
     </Grid>
   </Grid>
 </Window>

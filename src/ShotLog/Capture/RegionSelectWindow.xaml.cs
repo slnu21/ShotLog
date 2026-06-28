@@ -46,6 +46,7 @@ public partial class RegionSelectWindow : Window
         Surface.CaptureMouse();
         UpdateSelection(_start, _start);
         Sel.Visibility = Visibility.Visible;
+        SizeTag.Visibility = Visibility.Visible;
         Hint.Visibility = Visibility.Collapsed;
     }
 
@@ -97,6 +98,13 @@ public partial class RegionSelectWindow : Window
         Sel.Width = r.Width;
         Sel.Height = r.Height;
         ShotBright.Clip = new RectangleGeometry(r);
+
+        // Live W×H readout in physical pixels, placed just above the selection (or below if no room).
+        int pw = (int)Math.Round(r.Width * _shot.Scale);
+        int ph = (int)Math.Round(r.Height * _shot.Scale);
+        SizeText.Text = $"{pw} × {ph}";
+        Canvas.SetLeft(SizeTag, r.X);
+        Canvas.SetTop(SizeTag, r.Y >= 28 ? r.Y - 28 : r.Y + r.Height + 6);
     }
 
     private static Rect MakeRect(Point a, Point b)

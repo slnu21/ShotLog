@@ -22,6 +22,7 @@ public sealed class TrayIconService : IDisposable
     public event EventHandler? CaptureNoteRequested;
     public event EventHandler? CaptureRegionRequested;
     public event EventHandler? CaptureWindowRequested;
+    public event EventHandler? CaptureClipboardRequested;
     public event EventHandler? InboxRequested;
     public event EventHandler? ComposeRequested;
     public event EventHandler? SettingsRequested;
@@ -70,6 +71,7 @@ public sealed class TrayIconService : IDisposable
         menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_CaptureNote), null, (_, __) => CaptureNoteRequested?.Invoke(this, EventArgs.Empty)));
         menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_CaptureRegion), null, (_, __) => CaptureRegionRequested?.Invoke(this, EventArgs.Empty)));
         menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_CaptureWindow), null, (_, __) => CaptureWindowRequested?.Invoke(this, EventArgs.Empty)));
+        menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_CaptureClipboard), null, (_, __) => CaptureClipboardRequested?.Invoke(this, EventArgs.Empty)));
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_Inbox), null, (_, __) => InboxRequested?.Invoke(this, EventArgs.Empty)));
         menu.Items.Add(new ToolStripMenuItem(M(Strings.Tray_Compose), null, (_, __) => ComposeRequested?.Invoke(this, EventArgs.Empty)));

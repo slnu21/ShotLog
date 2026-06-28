@@ -15,6 +15,7 @@ public sealed class AppSettings
     public string NoteHotkey { get; set; } = "Ctrl+Alt+D";
     public string RegionHotkey { get; set; } = "Ctrl+Alt+R";
     public string WindowHotkey { get; set; } = "Ctrl+Alt+W";
+    public string ClipboardHotkey { get; set; } = "Ctrl+Alt+C";
     public string InboxHotkey { get; set; } = "Ctrl+Alt+I";
 
     /// <summary>Root folder for "글쓰기 내보내기" output. Empty → Documents\ShotLog-export at use time.</summary>

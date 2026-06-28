@@ -100,6 +100,11 @@
               <TextBlock Text="{x:Static res:Strings.Settings_HkWindow}" VerticalAlignment="Center"/>
               <TextBox x:Name="WindowBox" Grid.Column="1" Style="{StaticResource FieldBox}"/>
             </Grid>
+            <Grid Margin="0,0,0,8">
+              <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="220"/></Grid.ColumnDefinitions>
+              <TextBlock Text="{x:Static res:Strings.Settings_HkClipboard}" VerticalAlignment="Center"/>
+              <TextBox x:Name="ClipboardBox" Grid.Column="1" Style="{StaticResource FieldBox}"/>
+            </Grid>
             <Grid>
               <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="220"/></Grid.ColumnDefinitions>
               <TextBlock Text="{x:Static res:Strings.Settings_HkInbox}" VerticalAlignment="Center"/>

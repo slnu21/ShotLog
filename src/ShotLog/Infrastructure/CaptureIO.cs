@@ -26,6 +26,14 @@ public static class CaptureIO
         return path;
     }
 
+    /// <summary>Overwrites an existing PNG in place (used after annotating a saved capture).</summary>
+    public static void OverwritePng(System.Drawing.Bitmap bmp, string path)
+    {
+        string? dir = Path.GetDirectoryName(path);
+        if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+        bmp.Save(path, ImageFormat.Png);
+    }
+
     /// <summary>(Re)writes a same-named .md next to the PNG so the memo is readable in Explorer too.</summary>
     public static void WriteSidecar(CaptureRecord r)
     {

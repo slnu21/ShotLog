@@ -126,6 +126,7 @@ public partial class App : Application
         _tray.CaptureNoteRequested += (_, __) => CaptureMonitorWithNote();
         _tray.CaptureRegionRequested += (_, __) => CaptureRegion();
         _tray.CaptureWindowRequested += (_, __) => CaptureActiveWindow();
+        _tray.CaptureClipboardRequested += (_, __) => CaptureInstantToClipboard();
         _tray.InboxRequested += (_, __) => ShowInbox();
         _tray.ComposeRequested += (_, __) => ShowCompose();
         _tray.SettingsRequested += (_, __) => ShowSettings();
@@ -144,6 +145,7 @@ public partial class App : Application
         _hotkeys.TryRegister(s.NoteHotkey, () => Dispatcher.Invoke(CaptureMonitorWithNote));
         _hotkeys.TryRegister(s.RegionHotkey, () => Dispatcher.Invoke(CaptureRegion));
         _hotkeys.TryRegister(s.WindowHotkey, () => Dispatcher.Invoke(CaptureActiveWindow));
+        _hotkeys.TryRegister(s.ClipboardHotkey, () => Dispatcher.Invoke(CaptureInstantToClipboard));
         _hotkeys.TryRegister(s.InboxHotkey, () => Dispatcher.Invoke(ShowInbox));
     }
 
@@ -216,6 +218,23 @@ public partial class App : Application
             {
                 shot.Image.Dispose();
             }
+        }
+        catch { /* never crash on a hotkey */ }
+    }
+
+    /// <summary>Hotkey → capture the active monitor straight to the clipboard (no save, no UI).</summary>
+    private void CaptureInstantToClipboard()
+    {
+        try
+        {
+            var shot = _capture.CaptureActiveMonitor();
+            try
+            {
+                ClipboardHelper.CopyImage(shot.Image);
+                if (Settings.Current.NotifyOnCapture)
+                    _tray?.Notify("ShotLog", Strings.Notify_Clipboard);
+            }
+            finally { shot.Image.Dispose(); }
         }
         catch { /* never crash on a hotkey */ }
     }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ShotLog.Dialogs;
 using ShotLog.Infrastructure;
 using ShotLog.Models;
 using ShotLog.Resources;
@@ -39,6 +40,7 @@ public partial class SettingsWindow : Window
         NoteBox.Text = s.NoteHotkey;
         RegionBox.Text = s.RegionHotkey;
         WindowBox.Text = s.WindowHotkey;
+        ClipboardBox.Text = s.ClipboardHotkey;
         InboxBox.Text = s.InboxHotkey;
 
         ExportRootBox.Text = string.IsNullOrWhiteSpace(s.ExportRoot) ? App.ExportRoot() : s.ExportRoot;
@@ -88,13 +90,14 @@ public partial class SettingsWindow : Window
             (Strings.Settings_HkShortNote, NoteBox.Text),
             (Strings.Settings_HkShortRegion, RegionBox.Text),
             (Strings.Settings_HkShortWindow, WindowBox.Text),
+            (Strings.Settings_HkShortClipboard, ClipboardBox.Text),
             (Strings.Settings_HkShortInbox, InboxBox.Text),
         };
         var invalid = gestures.Where(g => !HotkeyManager.TryParse(g.Value, out _, out _)).Select(g => g.Label).ToList();
         if (invalid.Count > 0)
         {
-            MessageBox.Show(this, string.Format(Strings.Settings_InvalidHotkeyFormat, string.Join(", ", invalid)),
-                "ShotLog", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageWindow.Alert(this, string.Format(Strings.Settings_InvalidHotkeyFormat, string.Join(", ", invalid)),
+                Strings.Dialog_Title, DialogKind.Warn);
             return;
         }
 
@@ -129,6 +132,7 @@ public partial class SettingsWindow : Window
         s.NoteHotkey = NoteBox.Text.Trim();
         s.RegionHotkey = RegionBox.Text.Trim();
         s.WindowHotkey = WindowBox.Text.Trim();
+        s.ClipboardHotkey = ClipboardBox.Text.Trim();
         s.InboxHotkey = InboxBox.Text.Trim();
 
         s.ExportRoot = ExportRootBox.Text.Trim();

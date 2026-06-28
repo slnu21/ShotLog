@@ -16,6 +16,10 @@
             MouseLeftButtonDown="OnDown" MouseMove="OnMove" MouseLeftButtonUp="OnUp">
       <Rectangle x:Name="Sel" Stroke="#FF5AA0FF" StrokeThickness="1.5"
                  Fill="#202F6FE0" Visibility="Collapsed"/>
+      <Border x:Name="SizeTag" Background="#CC0B1220" BorderBrush="#FF2A3A55" BorderThickness="1"
+              CornerRadius="6" Padding="7,3" Visibility="Collapsed">
+        <TextBlock x:Name="SizeText" Foreground="#FFCFE3FF" FontSize="12" FontWeight="SemiBold"/>
+      </Border>
       <Border x:Name="Hint" Background="#CC0B1220" BorderBrush="#FF2A3A55" BorderThickness="1"
               CornerRadius="9" Padding="14,9" Canvas.Left="24" Canvas.Top="24">
         <TextBlock Foreground="#FFCFE3FF" FontSize="13"
