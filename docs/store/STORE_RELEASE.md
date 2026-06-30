@@ -136,10 +136,21 @@ $cert = New-SelfSignedCertificate -Type Custom -Subject "CN=ShotLog-Test" `
 - 타일: 시작 메뉴에서 네이비 타일 위 흰 카드.
 
 ## 6. WACK (Windows App Certification Kit)
+> WACK는 **관리자 권한** + **설치 가능(서명·신뢰)된 패키지**가 필요합니다(앱을 배포해 테스트하므로).
+> Store 업로드 패키지는 미서명이라 그대로는 못 돌리므로, **테스트 번들**을 일회용 자체서명 인증서로 서명해 검사합니다.
+> (배포용 `.msixupload`는 건드리지 않음.)
+
+**간편 실행(권장)** — 위 전 과정을 자동화한 스크립트. **관리자 PowerShell**에서:
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\run-wack.ps1
+# 결과: build\wack\wack-<package>.xml  (브라우저로 열어 OVERALL_RESULT 확인)
+```
+
+**수동(참고)**:
 ```powershell
 & "C:\Program Files (x86)\Windows Kits\10\App Certification Kit\appcert.exe" reset
 & "C:\Program Files (x86)\Windows Kits\10\App Certification Kit\appcert.exe" test `
-  -appxpackagepath "<...>\ShotLog_1.0.0.0_x64.msix" -reportoutputpath "wack.xml"
+  -appxpackagepath "<...>\ShotLog_1.1.0.0_x64.msix" -reportoutputpath "wack.xml"
 ```
 - 실제 결과(2026-06, 이 패키지): **OVERALL_RESULT = PASS** (`APP_TYPE=Centennial`).
   - 선택(OPTIONAL) 테스트 **"차단된 실행 파일"** 1건만 FAIL → self-contained .NET 런타임 DLL들이 `cmd`/`reg`/`CreateProcess`/`ShellExecute` 문자열을 내부에 포함하는 **알려진 오탐**. OPTIONAL이라 OVERALL/제출을 차단하지 않음.

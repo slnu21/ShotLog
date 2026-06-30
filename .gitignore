@@ -17,3 +17,6 @@ BundleArtifacts/
 ## Local signing / sideload test artifacts (private keys must never be committed)
 *.cer
 *.pfx
+
+## WACK run output (reports, temp certs) — see scripts/run-wack.ps1
+build/
