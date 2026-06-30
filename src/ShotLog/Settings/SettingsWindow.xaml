@@ -66,7 +66,14 @@
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                       <TextBlock Text="{x:Static res:Strings.Settings_Color}" Style="{StaticResource MiniLabel}"/>
-                      <TextBox Text="{Binding Color, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Style="{StaticResource FieldBox}"/>
+                      <Button Style="{StaticResource Btn}" Height="36" Padding="8,0" Click="OnPickColor" Tag="{Binding}">
+                        <StackPanel Orientation="Horizontal">
+                          <Border Width="18" Height="18" CornerRadius="4" Margin="0,0,8,0"
+                                  Background="{Binding Color, Converter={StaticResource HexToBrush}}"
+                                  BorderBrush="{StaticResource Border}" BorderThickness="1"/>
+                          <TextBlock Text="{Binding Color}" VerticalAlignment="Center" FontSize="12"/>
+                        </StackPanel>
+                      </Button>
                     </StackPanel>
                   </Grid>
                 </StackPanel>

@@ -56,6 +56,29 @@ public static class ImageHelper
         catch { return null; }
     }
 
+    /// <summary>Copies <paramref name="srcPath"/> to <paramref name="destPath"/> as PNG, downscaled to
+    /// <paramref name="maxWidth"/> px wide. When <paramref name="maxWidth"/> &lt;= 0 or the source is already
+    /// narrower, the file is copied verbatim (never upscales).</summary>
+    public static void SaveResizedPng(string srcPath, string destPath, int maxWidth)
+    {
+        using var src = new System.Drawing.Bitmap(srcPath);
+        if (maxWidth <= 0 || src.Width <= maxWidth)
+        {
+            File.Copy(srcPath, destPath, overwrite: false);
+            return;
+        }
+
+        int w = maxWidth;
+        int h = Math.Max(1, (int)Math.Round(src.Height * (maxWidth / (double)src.Width)));
+        using var scaled = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        using (var g = System.Drawing.Graphics.FromImage(scaled))
+        {
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            g.DrawImage(src, 0, 0, w, h);
+        }
+        scaled.Save(destPath, ImageFormat.Png);
+    }
+
     /// <summary>Loads a downscaled thumbnail from a PNG path without keeping the file locked. Null on failure.</summary>
     public static BitmapImage? LoadThumb(string path, int decodeWidth = 260)
     {

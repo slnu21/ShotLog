@@ -58,6 +58,52 @@ public static class CaptureIO
         catch { /* best-effort */ }
     }
 
+    /// <summary>Moves a capture's PNG (and its .md sidecar, when <paramref name="sidecar"/>) into
+    /// <paramref name="destFolder"/>, updating <see cref="CaptureRecord.ImagePath"/>. Best-effort: returns
+    /// false (and leaves the record untouched) if the move fails. Never throws.</summary>
+    public static bool MoveCapture(CaptureRecord r, string destFolder, bool sidecar)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(r.ImagePath) || !File.Exists(r.ImagePath)) return false;
+            Directory.CreateDirectory(destFolder);
+
+            string srcDir = Path.GetDirectoryName(r.ImagePath) ?? "";
+            if (string.Equals(Path.GetFullPath(srcDir), Path.GetFullPath(destFolder), StringComparison.OrdinalIgnoreCase))
+                return true;    // already in the destination folder — nothing to move
+
+            string destPath = UniqueInFolder(destFolder, r.ImagePath);
+            File.Move(r.ImagePath, destPath);
+
+            if (sidecar)
+            {
+                string srcSide = Path.ChangeExtension(r.ImagePath, ".md");
+                if (File.Exists(srcSide))
+                {
+                    try { File.Move(srcSide, Path.ChangeExtension(destPath, ".md")); } catch { /* best-effort */ }
+                }
+            }
+
+            r.ImagePath = destPath;
+            return true;
+        }
+        catch { return false; }
+    }
+
+    private static string UniqueInFolder(string folder, string sourcePath)
+    {
+        string name = Path.GetFileName(sourcePath);
+        string dest = Path.Combine(folder, name);
+        int k = 2;
+        while (File.Exists(dest))
+        {
+            name = $"{Path.GetFileNameWithoutExtension(sourcePath)}_{k}{Path.GetExtension(sourcePath)}";
+            dest = Path.Combine(folder, name);
+            k++;
+        }
+        return dest;
+    }
+
     public static void DeleteFiles(string imagePath, bool sidecar)
     {
         try { if (File.Exists(imagePath)) File.Delete(imagePath); } catch { }

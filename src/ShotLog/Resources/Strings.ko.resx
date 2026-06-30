@@ -223,6 +223,15 @@
   <data name="Compose_HtmlGeneratedFormat" xml:space="preserve">
     <value>HTML 생성됨: {0}</value>
   </data>
+  <data name="Compose_ImageWidth" xml:space="preserve">
+    <value>이미지 너비 (px, 0=원본)</value>
+  </data>
+  <data name="Compose_SelectAll" xml:space="preserve">
+    <value>전체 선택</value>
+  </data>
+  <data name="Compose_SelectNone" xml:space="preserve">
+    <value>전체 해제</value>
+  </data>
   <data name="Inbox_Title" xml:space="preserve">
     <value>ShotLog — 인박스</value>
   </data>
@@ -273,6 +282,42 @@
   <data name="Inbox_NoneSelected" xml:space="preserve">
     <value>선택된 캡처가 없습니다.</value>
   </data>
+  <data name="Inbox_MoveToPreset" xml:space="preserve">
+    <value>📁 프리셋으로 이동</value>
+  </data>
+  <data name="Inbox_MoveTitle" xml:space="preserve">
+    <value>프리셋으로 이동</value>
+  </data>
+  <data name="Inbox_MovePrompt" xml:space="preserve">
+    <value>이동할 대상 프리셋을 선택하세요.</value>
+  </data>
+  <data name="Inbox_MoveReplaceTags" xml:space="preserve">
+    <value>태그를 프리셋 기본 태그로 교체</value>
+  </data>
+  <data name="Inbox_MoveDoneFormat" xml:space="preserve">
+    <value>캡처 {0}개를 이동했습니다.</value>
+  </data>
+  <data name="Inbox_MoveNoPresets" xml:space="preserve">
+    <value>프리셋이 없습니다. 먼저 설정에서 추가하세요.</value>
+  </data>
+  <data name="Inbox_TipCopy" xml:space="preserve">
+    <value>이미지 복사</value>
+  </data>
+  <data name="Inbox_TipAnnotate" xml:space="preserve">
+    <value>주석</value>
+  </data>
+  <data name="Inbox_TipFolder" xml:space="preserve">
+    <value>탐색기에서 보기</value>
+  </data>
+  <data name="Inbox_TipDelete" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="Inbox_EditTags" xml:space="preserve">
+    <value>태그 편집</value>
+  </data>
+  <data name="Inbox_TagsWatermark" xml:space="preserve">
+    <value>태그1, 태그2 …</value>
+  </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>ShotLog — 설정</value>
   </data>
@@ -289,7 +334,7 @@
     <value>기본 태그 (쉼표)</value>
   </data>
   <data name="Settings_Color" xml:space="preserve">
-    <value>색상 (#RRGGBB)</value>
+    <value>색상</value>
   </data>
   <data name="Settings_AddPreset" xml:space="preserve">
     <value>+ 프리셋 추가</value>
@@ -405,6 +450,9 @@
   </data>
   <data name="Dialog_Title" xml:space="preserve">
     <value>ShotLog</value>
+  </data>
+  <data name="Picker_Custom" xml:space="preserve">
+    <value>사용자 지정…</value>
   </data>
   <data name="Export_Untitled" xml:space="preserve">
     <value>제목 없음</value>

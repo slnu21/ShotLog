@@ -223,6 +223,15 @@
   <data name="Compose_HtmlGeneratedFormat" xml:space="preserve">
     <value>HTML generated: {0}</value>
   </data>
+  <data name="Compose_ImageWidth" xml:space="preserve">
+    <value>Image width (px, 0 = original)</value>
+  </data>
+  <data name="Compose_SelectAll" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="Compose_SelectNone" xml:space="preserve">
+    <value>Clear</value>
+  </data>
   <data name="Inbox_Title" xml:space="preserve">
     <value>ShotLog — Inbox</value>
   </data>
@@ -273,6 +282,42 @@ Their image files will be deleted too.</value>
   <data name="Inbox_NoneSelected" xml:space="preserve">
     <value>No captures are selected.</value>
   </data>
+  <data name="Inbox_MoveToPreset" xml:space="preserve">
+    <value>📁 Move to preset</value>
+  </data>
+  <data name="Inbox_MoveTitle" xml:space="preserve">
+    <value>Move to preset</value>
+  </data>
+  <data name="Inbox_MovePrompt" xml:space="preserve">
+    <value>Choose the destination preset.</value>
+  </data>
+  <data name="Inbox_MoveReplaceTags" xml:space="preserve">
+    <value>Replace tags with the preset's default tags</value>
+  </data>
+  <data name="Inbox_MoveDoneFormat" xml:space="preserve">
+    <value>Moved {0} capture(s).</value>
+  </data>
+  <data name="Inbox_MoveNoPresets" xml:space="preserve">
+    <value>No presets are defined. Add one in Settings first.</value>
+  </data>
+  <data name="Inbox_TipCopy" xml:space="preserve">
+    <value>Copy image</value>
+  </data>
+  <data name="Inbox_TipAnnotate" xml:space="preserve">
+    <value>Annotate</value>
+  </data>
+  <data name="Inbox_TipFolder" xml:space="preserve">
+    <value>Show in Explorer</value>
+  </data>
+  <data name="Inbox_TipDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Inbox_EditTags" xml:space="preserve">
+    <value>Edit tags</value>
+  </data>
+  <data name="Inbox_TagsWatermark" xml:space="preserve">
+    <value>tag1, tag2 …</value>
+  </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>ShotLog — Settings</value>
   </data>
@@ -289,7 +334,7 @@ Their image files will be deleted too.</value>
     <value>Default tags (comma)</value>
   </data>
   <data name="Settings_Color" xml:space="preserve">
-    <value>Color (#RRGGBB)</value>
+    <value>Color</value>
   </data>
   <data name="Settings_AddPreset" xml:space="preserve">
     <value>+ Add preset</value>
@@ -405,6 +450,9 @@ Example: Ctrl+Alt+S</value>
   </data>
   <data name="Dialog_Title" xml:space="preserve">
     <value>ShotLog</value>
+  </data>
+  <data name="Picker_Custom" xml:space="preserve">
+    <value>Custom…</value>
   </data>
   <data name="Export_Untitled" xml:space="preserve">
     <value>Untitled</value>

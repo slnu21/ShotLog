@@ -21,6 +21,12 @@ public sealed class AppSettings
     /// <summary>Root folder for "글쓰기 내보내기" output. Empty → Documents\ShotLog-export at use time.</summary>
     public string ExportRoot { get; set; } = "";
 
+    /// <summary>Last-used export image width in px (downscale only). 0 → keep original size.</summary>
+    public int ExportImageWidth { get; set; } = 0;
+
+    /// <summary>Sticky default for the Inbox "move to preset" dialog: replace tags with the target preset's defaults.</summary>
+    public bool MoveReplaceTags { get; set; } = false;
+
     /// <summary>Write a same-named .md next to each PNG so the memo is visible in Explorer too.</summary>
     public bool SidecarEnabled { get; set; } = true;
 

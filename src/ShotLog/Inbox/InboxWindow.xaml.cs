@@ -150,6 +150,74 @@ public partial class InboxWindow : Window
         catch { /* ignore */ }
     }
 
+    private void OnMoveToPreset(object sender, RoutedEventArgs e)
+    {
+        var sel = _all.Where(vm => vm.Selected).ToList();
+        if (sel.Count == 0)
+        {
+            MessageWindow.Alert(this, Strings.Inbox_NoneSelected, Strings.Inbox_MoveTitle, DialogKind.Info);
+            return;
+        }
+        var presets = _settings.Current.Presets;
+        if (presets.Count == 0)
+        {
+            MessageWindow.Alert(this, Strings.Inbox_MoveNoPresets, Strings.Inbox_MoveTitle, DialogKind.Warn);
+            return;
+        }
+
+        var pick = PresetPickWindow.Pick(this, presets, _settings.Current.MoveReplaceTags);
+        if (pick == null) return;
+        var (target, replaceTags) = pick.Value;
+
+        // Remember the choice until the user changes it.
+        if (_settings.Current.MoveReplaceTags != replaceTags)
+        {
+            _settings.Current.MoveReplaceTags = replaceTags;
+            _settings.Save();
+        }
+
+        foreach (var vm in sel)
+        {
+            CaptureIO.MoveCapture(vm.Record, target.FolderPath, _settings.Current.SidecarEnabled);
+            vm.Record.PresetId = target.Id;
+            vm.Record.PresetName = target.Name;
+            if (replaceTags) vm.Record.Tags = new List<string>(target.DefaultTags);
+            if (_settings.Current.SidecarEnabled) CaptureIO.WriteSidecar(vm.Record);
+        }
+        _captures.Save();
+        ReloadList();
+    }
+
+    // ---- inline tag editing (chips <-> editor) ----
+
+    private void OnEditTags(object sender, MouseButtonEventArgs e)
+    {
+        if (((FrameworkElement)sender).Tag is InboxItemVM vm) vm.EditingTags = true;
+    }
+
+    private void OnTagEditorVisible(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is TextBox tb && tb.IsVisible)
+        {
+            tb.Focus();
+            tb.CaretIndex = tb.Text?.Length ?? 0;
+        }
+    }
+
+    private void OnTagsEditDone(object sender, RoutedEventArgs e)
+    {
+        if (((FrameworkElement)sender).Tag is InboxItemVM vm) vm.EditingTags = false;
+    }
+
+    private void OnTagsEditKey(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter && e.Key != Key.Escape) return;
+        e.Handled = true;
+        if (e.Key == Key.Enter && sender is TextBox tb)
+            tb.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();   // commit before collapsing
+        if (((FrameworkElement)sender).Tag is InboxItemVM vm) vm.EditingTags = false;
+    }
+
     private void OnDeleteSelected(object sender, RoutedEventArgs e)
     {
         var sel = _all.Where(vm => vm.Selected).ToList();

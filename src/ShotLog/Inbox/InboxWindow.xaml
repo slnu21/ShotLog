@@ -5,6 +5,14 @@
         Title="{x:Static res:Strings.Inbox_Title}" Height="660" Width="940" Icon="/Assets/shotlog.ico"
         Background="{StaticResource Bg}" WindowStartupLocation="CenterScreen">
   <Window.Resources>
+    <Style x:Key="TagChip" TargetType="Border">
+      <Setter Property="Background" Value="{StaticResource TagBg}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource TagBorder}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="7"/>
+      <Setter Property="Padding" Value="8,3"/>
+      <Setter Property="Margin" Value="0,2,6,2"/>
+    </Style>
     <Style x:Key="Card" TargetType="Border">
       <Setter Property="Background" Value="{StaticResource Surface}"/>
       <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
@@ -28,19 +36,21 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <!-- toolbar -->
-    <Grid Grid.Row="0" Margin="0,0,0,14">
+    <!-- toolbar (slim, single height) -->
+    <Grid Grid.Row="0" Margin="0,0,0,12">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-      <TextBox x:Name="SearchBox" Grid.Column="0" Style="{StaticResource FieldBox}"
-               TextChanged="OnSearchChanged"/>
-      <Button Grid.Column="1" Content="{x:Static res:Strings.Inbox_DeleteSelected}" Style="{StaticResource BtnDanger}" Margin="10,0,0,0" Click="OnDeleteSelected"/>
-      <Button Grid.Column="2" Content="{x:Static res:Strings.Inbox_Refresh}" Style="{StaticResource Btn}" Margin="10,0,0,0" Click="OnRefresh"/>
-      <Button Grid.Column="3" Content="{x:Static res:Strings.Inbox_ComposeButton}" Style="{StaticResource BtnPrimary}" Margin="10,0,0,0" Click="OnCompose"/>
+      <TextBox x:Name="SearchBox" Grid.Column="0" Style="{StaticResource FieldBox}" Height="32"
+               Padding="10,0" VerticalContentAlignment="Center" TextChanged="OnSearchChanged"/>
+      <Button Grid.Column="1" Content="{x:Static res:Strings.Inbox_MoveToPreset}" Style="{StaticResource Btn}" Height="32" Padding="12,0" Margin="8,0,0,0" Click="OnMoveToPreset"/>
+      <Button Grid.Column="2" Content="{x:Static res:Strings.Inbox_DeleteSelected}" Style="{StaticResource BtnDanger}" Height="32" Padding="12,0" Margin="8,0,0,0" Click="OnDeleteSelected"/>
+      <Button Grid.Column="3" Content="{x:Static res:Strings.Inbox_Refresh}" Style="{StaticResource Btn}" Height="32" Padding="12,0" Margin="8,0,0,0" Click="OnRefresh"/>
+      <Button Grid.Column="4" Content="{x:Static res:Strings.Inbox_ComposeButton}" Style="{StaticResource BtnPrimary}" Height="32" Padding="12,0" Margin="8,0,0,0" Click="OnCompose"/>
     </Grid>
 
     <!-- preset filter -->
@@ -54,61 +64,98 @@
             <DataTemplate>
               <Border Style="{StaticResource Card}">
                 <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="148"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                   </Grid.ColumnDefinitions>
 
-                  <CheckBox Grid.Column="0" IsChecked="{Binding Selected, Mode=TwoWay}"
-                            VerticalAlignment="Center" Margin="2,0,12,0"/>
-
-                  <!-- thumb -->
-                  <Border Grid.Column="1" CornerRadius="9" BorderBrush="#FF2A3340" BorderThickness="1"
-                          ClipToBounds="True" Height="90" Background="#FF0B0F15" Cursor="Hand"
+                  <!-- [0,0] image (with select checkbox overlay) -->
+                  <Border Grid.Row="0" Grid.Column="0" CornerRadius="9" BorderBrush="#FF2A3340" BorderThickness="1"
+                          ClipToBounds="True" Width="190" Height="130" Background="#FF0B0F15" Cursor="Hand"
                           MouseLeftButtonUp="OnOpenImage" Tag="{Binding}">
                     <Grid>
                       <Image Source="{Binding Thumb}" Stretch="UniformToFill"/>
                       <TextBlock Text="{x:Static res:Strings.Inbox_NoImage}" Foreground="{StaticResource TextDim}" FontSize="11"
                                  HorizontalAlignment="Center" VerticalAlignment="Center"
                                  Visibility="{Binding ThumbMissing, Converter={StaticResource BoolVis}}"/>
+                      <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6" CornerRadius="5"
+                              Background="#B00B0F15" Padding="3,1">
+                        <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}" VerticalAlignment="Center"/>
+                      </Border>
                     </Grid>
                   </Border>
 
-                  <!-- memo + tags -->
-                  <StackPanel Grid.Column="2" Margin="14,0,14,0">
-                    <TextBox Text="{Binding Memo, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                             Style="{StaticResource FieldBox}" AcceptsReturn="True" TextWrapping="Wrap"
-                             MinHeight="44" VerticalContentAlignment="Top"/>
-                    <Grid Margin="0,8,0,0">
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                      </Grid.ColumnDefinitions>
-                      <TextBox Grid.Column="0" Text="{Binding TagsText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                               Style="{StaticResource FieldBox}" Padding="9,6"/>
-                      <Border Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center"
-                              Background="{StaticResource Surface2}" BorderBrush="{StaticResource Border}"
-                              BorderThickness="1" CornerRadius="7" Padding="9,5">
-                        <TextBlock Text="{Binding PresetName}" FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
-                      </Border>
-                    </Grid>
+                  <!-- [1,0] icon-only actions under the image -->
+                  <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal"
+                              HorizontalAlignment="Center" Margin="0,8,0,0">
+                    <Button Style="{StaticResource IconBtn}" Content="📋" Margin="0,0,6,0" Click="OnCopy" Tag="{Binding}"
+                            ToolTip="{x:Static res:Strings.Inbox_TipCopy}"/>
+                    <Button Style="{StaticResource IconBtn}" Content="✎" Margin="0,0,6,0" Click="OnAnnotate" Tag="{Binding}"
+                            ToolTip="{x:Static res:Strings.Inbox_TipAnnotate}"/>
+                    <Button Style="{StaticResource IconBtn}" Content="📂" Margin="0,0,6,0" Click="OnOpenFolder" Tag="{Binding}"
+                            ToolTip="{x:Static res:Strings.Inbox_TipFolder}"/>
+                    <Button Style="{StaticResource IconBtn}" Content="🗑" Click="OnDelete" Tag="{Binding}"
+                            ToolTip="{x:Static res:Strings.Inbox_TipDelete}"/>
                   </StackPanel>
 
-                  <!-- right: time + actions -->
-                  <StackPanel Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <TextBlock Text="{Binding TimeText}" FontSize="11.5" Foreground="{StaticResource TextDim}"
-                               TextAlignment="Right" Margin="0,2,0,8"/>
-                    <Button Content="{x:Static res:Strings.Inbox_CopyButton}" Style="{StaticResource Btn}" Padding="10,6" FontSize="12"
-                            HorizontalAlignment="Right" Margin="0,0,0,8" Click="OnCopy" Tag="{Binding}"/>
-                    <Button Content="{x:Static res:Strings.Inbox_Annotate}" Style="{StaticResource Btn}" Padding="10,6" FontSize="12"
-                            HorizontalAlignment="Right" Margin="0,0,0,8" Click="OnAnnotate" Tag="{Binding}"/>
-                    <Button Content="{x:Static res:Strings.Inbox_OpenButton}" Style="{StaticResource Btn}" Padding="10,6" FontSize="12"
-                            HorizontalAlignment="Right" Margin="0,0,0,8" Click="OnOpenFolder" Tag="{Binding}"/>
-                    <Button Content="{x:Static res:Strings.Inbox_DeleteButton}" Style="{StaticResource Btn}" Padding="10,6" FontSize="12"
-                            HorizontalAlignment="Right" Click="OnDelete" Tag="{Binding}"/>
-                  </StackPanel>
+                  <!-- [0,1] memo — same height as the image, scrolls when long -->
+                  <TextBox Grid.Row="0" Grid.Column="1" Margin="14,0,0,0" Height="130"
+                           Text="{Binding Memo, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                           Style="{StaticResource FieldBox}" AcceptsReturn="True" TextWrapping="Wrap"
+                           VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"/>
+
+                  <!-- [1,1] tags (chips + inline edit) · preset · time -->
+                  <Grid Grid.Row="1" Grid.Column="1" Margin="14,8,0,0" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- chips view (click to edit) -->
+                    <Border Grid.Column="0" Background="Transparent" Cursor="Hand" MinHeight="28"
+                            Visibility="{Binding EditingTags, Converter={StaticResource InvBoolVis}}"
+                            MouseLeftButtonUp="OnEditTags" Tag="{Binding}"
+                            ToolTip="{x:Static res:Strings.Inbox_EditTags}">
+                      <Grid VerticalAlignment="Center">
+                        <ItemsControl ItemsSource="{Binding TagList}"
+                                      Visibility="{Binding HasTags, Converter={StaticResource BoolVis}}">
+                          <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                          </ItemsControl.ItemsPanel>
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                              <Border Style="{StaticResource TagChip}">
+                                <TextBlock Text="{Binding}" FontSize="11.5" Foreground="{StaticResource Tag}"/>
+                              </Border>
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="{x:Static res:Strings.Inbox_EditTags}" FontSize="11.5"
+                                   Foreground="{StaticResource TextDim}" VerticalAlignment="Center"
+                                   Visibility="{Binding HasTags, Converter={StaticResource InvBoolVis}}"/>
+                      </Grid>
+                    </Border>
+
+                    <!-- inline editor -->
+                    <TextBox Grid.Column="0" Text="{Binding TagsText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                             Style="{StaticResource FieldBox}" Padding="9,5" FontSize="12.5"
+                             Visibility="{Binding EditingTags, Converter={StaticResource BoolVis}}"
+                             IsVisibleChanged="OnTagEditorVisible" LostFocus="OnTagsEditDone"
+                             KeyDown="OnTagsEditKey" Tag="{Binding}"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
+                      <Border Background="{StaticResource Surface2}" BorderBrush="{StaticResource Border}"
+                              BorderThickness="1" CornerRadius="7" Padding="9,4" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding PresetName}" FontSize="11.5" Foreground="{StaticResource TextMuted}"/>
+                      </Border>
+                      <TextBlock Text="{Binding TimeText}" FontSize="11.5" Foreground="{StaticResource TextDim}"
+                                 VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+                  </Grid>
                 </Grid>
               </Border>
             </DataTemplate>

@@ -74,6 +74,13 @@ public partial class SettingsWindow : Window
         if (dlg.ShowDialog() == WinForms.DialogResult.OK) vm.FolderPath = dlg.SelectedPath;
     }
 
+    private void OnPickColor(object sender, RoutedEventArgs e)
+    {
+        if (((FrameworkElement)sender).Tag is not PresetEditVM vm) return;
+        var hex = ColorPickerWindow.Pick(this, vm.Color);
+        if (hex != null) vm.Color = hex;
+    }
+
     private void OnBrowseExport(object sender, RoutedEventArgs e)
     {
         using var dlg = new WinForms.FolderBrowserDialog();

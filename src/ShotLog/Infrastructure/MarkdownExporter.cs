@@ -17,7 +17,8 @@ public static class MarkdownExporter
 {
     public sealed record Result(string MarkdownPath, string FolderPath, int ImageCount);
 
-    public static Result Export(IEnumerable<CaptureRecord> records, string title, string outputRoot, bool includeFrontMatter)
+    public static Result Export(IEnumerable<CaptureRecord> records, string title, string outputRoot,
+        bool includeFrontMatter, int imageWidth = 0)
     {
         var list = records.OrderBy(r => r.CapturedAt).ToList();
         var date = list.Count > 0 ? list[0].CapturedAt : DateTimeOffset.Now;
@@ -42,7 +43,7 @@ public static class MarkdownExporter
                 string destName = UniqueDestName(imagesDir, r.ImagePath);
                 try
                 {
-                    File.Copy(r.ImagePath, Path.Combine(imagesDir, destName), overwrite: false);
+                    ImageHelper.SaveResizedPng(r.ImagePath, Path.Combine(imagesDir, destName), imageWidth);
                     imageCount++;
                 }
                 catch { /* skip unreadable image, keep going */ }
@@ -60,7 +61,7 @@ public static class MarkdownExporter
     /// <summary>Writes a single self-contained <c>.html</c> file (images inlined as data URIs) to
     /// <paramref name="outputRoot"/> and returns its path. Reuses <see cref="BuildHtmlPreview"/>.</summary>
     public static string ExportHtml(IEnumerable<CaptureRecord> records, string title, string outputRoot,
-        bool includeFrontMatter, Func<string, string?> imageToDataUri)
+        bool includeFrontMatter, Func<string, string?> imageToDataUri, int imageWidth = 0)
     {
         var list = records.OrderBy(r => r.CapturedAt).ToList();
         var date = list.Count > 0 ? list[0].CapturedAt : DateTimeOffset.Now;
@@ -73,7 +74,7 @@ public static class MarkdownExporter
         int k = 2;
         while (File.Exists(path)) { path = Path.Combine(outputRoot, $"{slug}_{k}.html"); k++; }
 
-        string html = BuildHtmlPreview(list, title, includeFrontMatter, imageToDataUri);
+        string html = BuildHtmlPreview(list, title, includeFrontMatter, imageToDataUri, imageWidth);
         File.WriteAllText(path, html, new UTF8Encoding(false));
         return path;
     }
@@ -103,7 +104,7 @@ public static class MarkdownExporter
     /// <paramref name="imageToDataUri"/> (keyed by the source path) so nothing is copied to disk.
     /// </summary>
     public static string BuildHtmlPreview(IEnumerable<CaptureRecord> records, string title, bool includeFrontMatter,
-        Func<string, string?> imageToDataUri)
+        Func<string, string?> imageToDataUri, int imageWidth = 0)
     {
         var list = records.OrderBy(r => r.CapturedAt).ToList();
         var date = list.Count > 0 ? list[0].CapturedAt : DateTimeOffset.Now;
@@ -142,7 +143,7 @@ public static class MarkdownExporter
             }
         }
 
-        return HtmlShell(body.ToString());
+        return HtmlShell(body.ToString(), imageWidth);
     }
 
     private static string Html(string s) => s
@@ -150,7 +151,11 @@ public static class MarkdownExporter
 
     private static string Br(string s) => s.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "<br>");
 
-    private static string HtmlShell(string body) =>
+    private static string HtmlShell(string body, int imageWidth = 0)
+    {
+        // When an explicit export width is set, cap the rendered image so the preview is WYSIWYG.
+        string imgWidth = imageWidth > 0 ? $"max-width:min(100%,{imageWidth}px);" : "max-width:100%;";
+        return
         "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>" +
         ":root{color-scheme:dark;}" +
         "html,body{margin:0;}" +
@@ -159,12 +164,13 @@ public static class MarkdownExporter
         "h2{font-size:1.3em;font-weight:600;border-bottom:1px solid #21262d;padding-bottom:.3em;margin:1.4em 0 .6em;}" +
         "p{margin:.6em 0;}" +
         ".meta{margin-top:-.3em;}em{color:#8b949e;}" +
-        "img{max-width:100%;height:auto;border:1px solid #30363d;border-radius:8px;background:#0b0f15;}" +
+        "img{" + imgWidth + "height:auto;border:1px solid #30363d;border-radius:8px;background:#0b0f15;}" +
         ".missing{color:#6e7681;}" +
         ".frontmatter{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px 12px;color:#8b949e;font-family:Consolas,monospace;font-size:12px;white-space:pre-wrap;}" +
         "::-webkit-scrollbar{width:12px;height:12px;}" +
         "::-webkit-scrollbar-thumb{background:#30363d;border-radius:6px;border:3px solid #0d1117;}" +
         "</style></head><body>" + body + "</body></html>";
+    }
 
     private static void WriteHeader(StringBuilder sb, List<CaptureRecord> list, string title, bool includeFrontMatter)
     {

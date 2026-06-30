@@ -53,6 +53,8 @@ public partial class ComposeWindow : Window
     {
         _dataUriCache.Clear();   // images may have changed (e.g. annotated) since last open
         if (string.IsNullOrWhiteSpace(OutputBox.Text)) OutputBox.Text = App.ExportRoot();
+        ImageWidthBox.Text = _settings.Current.ExportImageWidth > 0
+            ? _settings.Current.ExportImageWidth.ToString() : "";
         if (string.IsNullOrWhiteSpace(TitleBox.Text))
             TitleBox.Text = string.Format(Strings.Compose_DefaultTitleFormat, DateTimeOffset.Now.ToString("yyyy-MM-dd"));
 
@@ -138,10 +140,42 @@ public partial class ComposeWindow : Window
             .OrderBy(r => r.CapturedAt)
             .ToList();
 
-        _items = candidates.Select(r => new ComposeItemVM(r)).ToList();
-        foreach (var vm in _items) vm.SelectionChanged += OnSelectionChanged;
+        _items = candidates.Select(r => new ComposeItemVM(r, _captures, _settings)).ToList();
+        foreach (var vm in _items)
+        {
+            vm.SelectionChanged += OnSelectionChanged;
+            vm.MemoChanged += OnSelectionChanged;   // re-render preview after an inline memo edit
+        }
         List.ItemsSource = _items;
         UpdatePreview();
+    }
+
+    private bool _bulkSelect;
+
+    private void OnSelectAll(object sender, RoutedEventArgs e) => SetAllSelected(true);
+    private void OnSelectNone(object sender, RoutedEventArgs e) => SetAllSelected(false);
+
+    private void SetAllSelected(bool on)
+    {
+        _bulkSelect = true;
+        foreach (var vm in _items) vm.Selected = on;
+        _bulkSelect = false;
+        UpdatePreview();
+    }
+
+    /// <summary>Parsed export image width (px); 0 = keep original size.</summary>
+    private int ImageWidthValue()
+        => int.TryParse(ImageWidthBox.Text?.Trim(), out int w) && w > 0 ? w : 0;
+
+    private void PersistExportPrefs(string outputRoot)
+    {
+        try
+        {
+            _settings.Current.ExportRoot = outputRoot;
+            _settings.Current.ExportImageWidth = ImageWidthValue();
+            _settings.Save();
+        }
+        catch { /* best-effort */ }
     }
 
     private bool DateMatch(CaptureRecord r, DateTimeOffset now) => _dateMode switch
@@ -151,7 +185,7 @@ public partial class ComposeWindow : Window
         _ => true,
     };
 
-    private void OnSelectionChanged() => UpdatePreview();
+    private void OnSelectionChanged() { if (!_bulkSelect) UpdatePreview(); }
     private void OnAnyChanged(object sender, RoutedEventArgs e) => UpdatePreview();
 
     private void UpdatePreview()
@@ -213,7 +247,7 @@ public partial class ComposeWindow : Window
         try
         {
             var selected = _items.Where(i => i.Selected).Select(i => i.Record).ToList();
-            string html = MarkdownExporter.BuildHtmlPreview(selected, TitleBox.Text, FrontMatterBox.IsChecked == true, DataUriFor);
+            string html = MarkdownExporter.BuildHtmlPreview(selected, TitleBox.Text, FrontMatterBox.IsChecked == true, DataUriFor, ImageWidthValue());
 
             // Navigate to a fresh temp file rather than NavigateToString (which caps at ~2 MB; base64 images blow past it).
             string dir = Path.Combine(WebViewDir(), "tmp");
@@ -260,10 +294,12 @@ public partial class ComposeWindow : Window
 
         string outputRoot = string.IsNullOrWhiteSpace(OutputBox.Text) ? App.ExportRoot() : OutputBox.Text.Trim();
         OutputBox.Text = outputRoot;
+        int width = ImageWidthValue();
+        PersistExportPrefs(outputRoot);
         try
         {
             string path = MarkdownExporter.ExportHtml(selected, TitleBox.Text.Trim(), outputRoot,
-                FrontMatterBox.IsChecked == true, p => ImageHelper.ToDataUri(p, 1920));
+                FrontMatterBox.IsChecked == true, p => ImageHelper.ToDataUri(p, width > 0 ? width : 1920), width);
             StatusLabel.Text = string.Format(Strings.Compose_HtmlGeneratedFormat, path);
             Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
         }
@@ -284,10 +320,11 @@ public partial class ComposeWindow : Window
 
         string outputRoot = string.IsNullOrWhiteSpace(OutputBox.Text) ? App.ExportRoot() : OutputBox.Text.Trim();
         OutputBox.Text = outputRoot;
+        PersistExportPrefs(outputRoot);
 
         try
         {
-            var res = MarkdownExporter.Export(selected, TitleBox.Text.Trim(), outputRoot, FrontMatterBox.IsChecked == true);
+            var res = MarkdownExporter.Export(selected, TitleBox.Text.Trim(), outputRoot, FrontMatterBox.IsChecked == true, ImageWidthValue());
             StatusLabel.Text = string.Format(Strings.Compose_GeneratedStatusFormat, res.MarkdownPath, res.ImageCount);
             Process.Start(new ProcessStartInfo(res.MarkdownPath) { UseShellExecute = true });
         }

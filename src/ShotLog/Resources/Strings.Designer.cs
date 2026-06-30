@@ -74,6 +74,9 @@ public static class Strings
     public static string Compose_ExportHtml => G("Compose_ExportHtml");
     public static string Compose_CopiedStatus => G("Compose_CopiedStatus");
     public static string Compose_HtmlGeneratedFormat => G("Compose_HtmlGeneratedFormat");
+    public static string Compose_ImageWidth => G("Compose_ImageWidth");
+    public static string Compose_SelectAll => G("Compose_SelectAll");
+    public static string Compose_SelectNone => G("Compose_SelectNone");
     public static string Inbox_Title => G("Inbox_Title");
     public static string Inbox_Refresh => G("Inbox_Refresh");
     public static string Inbox_ComposeButton => G("Inbox_ComposeButton");
@@ -89,6 +92,18 @@ public static class Strings
     public static string Inbox_DeleteSelected => G("Inbox_DeleteSelected");
     public static string Inbox_DeleteSelectedConfirmFormat => G("Inbox_DeleteSelectedConfirmFormat");
     public static string Inbox_NoneSelected => G("Inbox_NoneSelected");
+    public static string Inbox_MoveToPreset => G("Inbox_MoveToPreset");
+    public static string Inbox_MoveTitle => G("Inbox_MoveTitle");
+    public static string Inbox_MovePrompt => G("Inbox_MovePrompt");
+    public static string Inbox_MoveReplaceTags => G("Inbox_MoveReplaceTags");
+    public static string Inbox_MoveDoneFormat => G("Inbox_MoveDoneFormat");
+    public static string Inbox_MoveNoPresets => G("Inbox_MoveNoPresets");
+    public static string Inbox_TipCopy => G("Inbox_TipCopy");
+    public static string Inbox_TipAnnotate => G("Inbox_TipAnnotate");
+    public static string Inbox_TipFolder => G("Inbox_TipFolder");
+    public static string Inbox_TipDelete => G("Inbox_TipDelete");
+    public static string Inbox_EditTags => G("Inbox_EditTags");
+    public static string Inbox_TagsWatermark => G("Inbox_TagsWatermark");
     public static string Settings_Title => G("Settings_Title");
     public static string Settings_PresetsSection => G("Settings_PresetsSection");
     public static string Settings_Name => G("Settings_Name");
@@ -133,6 +148,7 @@ public static class Strings
     public static string Annot_Width => G("Annot_Width");
     public static string Annot_TextWatermark => G("Annot_TextWatermark");
     public static string Dialog_Title => G("Dialog_Title");
+    public static string Picker_Custom => G("Picker_Custom");
     public static string Export_Untitled => G("Export_Untitled");
     public static string Sidecar_Time => G("Sidecar_Time");
     public static string Notify_SavedFormat => G("Notify_SavedFormat");

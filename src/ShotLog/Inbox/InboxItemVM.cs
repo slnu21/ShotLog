@@ -64,7 +64,21 @@ public sealed class InboxItemVM : INotifyPropertyChanged
             _r.Tags = Split(value);
             Persist();
             OnChanged(nameof(TagsText));
+            OnChanged(nameof(TagList));
+            OnChanged(nameof(HasTags));
         }
+    }
+
+    /// <summary>Tags as a chip-bindable list (read-only display).</summary>
+    public IReadOnlyList<string> TagList => _r.Tags;
+    public bool HasTags => _r.Tags.Count > 0;
+
+    private bool _editingTags;
+    /// <summary>Toggles the card's tag area between chips (false) and an inline editor (true).</summary>
+    public bool EditingTags
+    {
+        get => _editingTags;
+        set { if (_editingTags == value) return; _editingTags = value; OnChanged(nameof(EditingTags)); }
     }
 
     private static List<string> Split(string? s)
