@@ -315,6 +315,15 @@ Their image files will be deleted too.</value>
   <data name="Inbox_EditTags" xml:space="preserve">
     <value>Edit tags</value>
   </data>
+  <data name="Inbox_SelectVisible" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="Inbox_SelectVisibleTip" xml:space="preserve">
+    <value>Selects only the captures currently shown by the filter</value>
+  </data>
+  <data name="Inbox_SelectNone" xml:space="preserve">
+    <value>Clear</value>
+  </data>
   <data name="Inbox_TagsWatermark" xml:space="preserve">
     <value>tag1, tag2 …</value>
   </data>

@@ -20,6 +20,7 @@ public partial class InboxWindow : Window
     private readonly SettingsStore _settings;
     private readonly CaptureStore _captures;
     private List<InboxItemVM> _all = new();
+    private List<InboxItemVM> _view = new();   // currently visible (filtered) subset
     private string? _presetFilterId;
 
     /// <summary>Raised when the user clicks "글쓰기 내보내기".</summary>
@@ -78,11 +79,24 @@ public partial class InboxWindow : Window
     private void ApplyFilter()
     {
         string q = SearchBox.Text;
-        var view = _all.Where(vm =>
+        _view = _all.Where(vm =>
             (_presetFilterId == null || vm.Record.PresetId == _presetFilterId) && vm.Matches(q)).ToList();
-        List.ItemsSource = view;
-        EmptyHint.Visibility = view.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+        List.ItemsSource = _view;
+        EmptyHint.Visibility = _view.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         EmptyHint.Text = _all.Count == 0 ? Strings.Inbox_Empty : Strings.Inbox_NoMatch;
+    }
+
+    /// <summary>Selects exactly the visible (filtered) captures, clearing any hidden selection so a
+    /// follow-up move/delete only touches what's on screen.</summary>
+    private void OnSelectAllVisible(object sender, RoutedEventArgs e)
+    {
+        var visible = new HashSet<InboxItemVM>(_view);
+        foreach (var vm in _all) vm.Selected = visible.Contains(vm);
+    }
+
+    private void OnSelectNone(object sender, RoutedEventArgs e)
+    {
+        foreach (var vm in _all) vm.Selected = false;
     }
 
     private void OnSearchChanged(object sender, TextChangedEventArgs e) => ApplyFilter();

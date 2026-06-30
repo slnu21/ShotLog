@@ -103,6 +103,9 @@ public static class Strings
     public static string Inbox_TipFolder => G("Inbox_TipFolder");
     public static string Inbox_TipDelete => G("Inbox_TipDelete");
     public static string Inbox_EditTags => G("Inbox_EditTags");
+    public static string Inbox_SelectVisible => G("Inbox_SelectVisible");
+    public static string Inbox_SelectVisibleTip => G("Inbox_SelectVisibleTip");
+    public static string Inbox_SelectNone => G("Inbox_SelectNone");
     public static string Inbox_TagsWatermark => G("Inbox_TagsWatermark");
     public static string Settings_Title => G("Settings_Title");
     public static string Settings_PresetsSection => G("Settings_PresetsSection");

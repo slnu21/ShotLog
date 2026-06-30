@@ -53,8 +53,21 @@
       <Button Grid.Column="4" Content="{x:Static res:Strings.Inbox_ComposeButton}" Style="{StaticResource BtnPrimary}" Height="32" Padding="12,0" Margin="8,0,0,0" Click="OnCompose"/>
     </Grid>
 
-    <!-- preset filter -->
-    <WrapPanel x:Name="PresetFilter" Grid.Row="1" Margin="0,0,0,8"/>
+    <!-- preset filter + select-visible controls -->
+    <Grid Grid.Row="1" Margin="0,0,0,8">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <WrapPanel x:Name="PresetFilter" Grid.Column="0"/>
+      <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="10,0,0,0">
+        <Button Content="{x:Static res:Strings.Inbox_SelectVisible}" Style="{StaticResource Btn}"
+                Height="28" Padding="11,0" FontSize="11.5" Click="OnSelectAllVisible"
+                ToolTip="{x:Static res:Strings.Inbox_SelectVisibleTip}"/>
+        <Button Content="{x:Static res:Strings.Inbox_SelectNone}" Style="{StaticResource Btn}"
+                Height="28" Padding="11,0" FontSize="11.5" Margin="6,0,0,0" Click="OnSelectNone"/>
+      </StackPanel>
+    </Grid>
 
     <!-- list -->
     <Grid Grid.Row="2">

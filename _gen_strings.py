@@ -95,6 +95,9 @@ DATA = [
     ("Inbox_TipFolder", "Show in Explorer", "탐색기에서 보기"),
     ("Inbox_TipDelete", "Delete", "삭제"),
     ("Inbox_EditTags", "Edit tags", "태그 편집"),
+    ("Inbox_SelectVisible", "Select all", "전체 선택"),
+    ("Inbox_SelectVisibleTip", "Selects only the captures currently shown by the filter", "현재 필터로 보이는 캡처만 전체 선택"),
+    ("Inbox_SelectNone", "Clear", "전체 해제"),
     ("Inbox_TagsWatermark", "tag1, tag2 …", "태그1, 태그2 …"),
     # Settings
     ("Settings_Title", "ShotLog — Settings", "ShotLog — 설정"),

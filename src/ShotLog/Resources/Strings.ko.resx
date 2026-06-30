@@ -315,6 +315,15 @@
   <data name="Inbox_EditTags" xml:space="preserve">
     <value>태그 편집</value>
   </data>
+  <data name="Inbox_SelectVisible" xml:space="preserve">
+    <value>전체 선택</value>
+  </data>
+  <data name="Inbox_SelectVisibleTip" xml:space="preserve">
+    <value>현재 필터로 보이는 캡처만 전체 선택</value>
+  </data>
+  <data name="Inbox_SelectNone" xml:space="preserve">
+    <value>전체 해제</value>
+  </data>
   <data name="Inbox_TagsWatermark" xml:space="preserve">
     <value>태그1, 태그2 …</value>
   </data>
