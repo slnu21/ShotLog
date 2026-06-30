@@ -16,7 +16,7 @@
   <Identity
     Name="SlnU.ShotLog"
     Publisher="CN=1398342C-A2D7-4B4A-BFE2-34D8CCFD7FBA"
-    Version="1.0.0.0" />
+    Version="1.1.0.0" />
 
   <Properties>
     <DisplayName>ShotLog</DisplayName>

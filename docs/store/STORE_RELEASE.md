@@ -8,7 +8,29 @@
 
 ---
 
-## ✅ 현재 상태 (2026-06: 로컬에서 `.msixupload` 빌드 검증 완료)
+## 🔖 1.1.0.0 업데이트 (현재 준비 중)
+
+1.0.0.0 최초 출시 이후의 **기능 업데이트**. 코드/매니페스트는 준비 완료, 남은 건 §4 빌드 → §7 재제출.
+
+- **버전 1.1.0.0** — 세 곳 동기화 완료(`ShotLog.csproj`, `app.manifest`, `Package.appxmanifest`).
+  revision(4번째)은 `0` 유지(§8 규칙).
+- **이번 빌드의 새 기능**(Partner Center "이번 업데이트의 새로운 기능"에 사용):
+  - Compose: 좌측 목록 메모 인라인 편집, 내보내기 이미지 너비 지정, 전체 선택/해제, 출력 폴더·너비 기억,
+    HTML 내보내기 레이아웃 버그 수정.
+  - Inbox: 카드 레이아웃 개편(큰 이미지·아이콘 액션·태그 칩 인라인 편집), 프리셋으로 이동(태그 교체 옵션·기억),
+    화면(필터)에 보이는 항목 전체 선택/해제, 상단 툴바 슬림화.
+  - Settings: 프리셋 색상 피커(팔레트 + Windows 색상 대화상자).
+  - 전역: 다크 툴팁(가독성), 색상/변환기 추가.
+- **스크린샷 갱신 완료**: 바뀐 UI로 `docs/store/screenshots/{ko,en}/*.png` 재생성(§0 `--screens` 훅).
+- **의존성/라이선스 리스크 없음**: `docs/THIRD-PARTY-NOTICES.md` 참고(WebView2·.NET 모두 무료·상용 배포 허용,
+  번들 폰트 없음 → 시스템 폰트 폴백).
+- **자체서명 사이드로드 테스트는 이번 업데이트엔 선택**: 매니페스트 구조·capability 변화 없이 순수 관리코드(C#/XAML)만
+  바뀌었고 1.0.0.0에서 전체 파이프라인+WACK PASS를 이미 검증했으므로, 곧장 §4의 Store 빌드(`.msixupload`)로 진행 가능.
+  (제출 전 §6 WACK 1회만 권장.)
+
+---
+
+## ✅ 1.0.0.0 상태 (2026-06: 로컬에서 `.msixupload` 빌드 검증 완료)
 
 VS Community **2026 (18.5.2)** 환경에서 Store 업로드 패키지까지 빌드·검증 완료. 남은 건 Partner Center 제출(§7)뿐.
 
@@ -45,7 +67,7 @@ $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Curren
 | 패키지 매니페스트(runFullTrust, startupTask, 타일 BackgroundColor `#0D1117`) | `src/ShotLog.Package/Package.appxmanifest` |
 | 패키징 프로젝트(.wapproj, x64/arm64) | `src/ShotLog.Package/ShotLog.Package.wapproj` |
 | 스토어/타일 비주얼 에셋(52종) | `src/ShotLog.Package/Images/` |
-| 버전 1.0.0.0 | `src/ShotLog/ShotLog.csproj` |
+| 버전 1.1.0.0 (revision=0) | `src/ShotLog/ShotLog.csproj`, `app.manifest`, `Package.appxmanifest` |
 | 리스팅 카피/개인정보처리방침/스크린샷 | `docs/store/` |
 
 에셋·스크린샷은 앱의 dev 훅으로 언제든 재생성:
@@ -143,7 +165,11 @@ no network calls; all screenshots and notes are stored locally on the user's dev
 ```
 
 ## 8. 제출 후
-- 인증 보통 수 영업일. 통과 시 게시. 업데이트 때마다 `Version`의 4번째(revision)를 올려 재빌드·재업로드.
+- 인증 보통 수 영업일. 통과 시 게시.
+- **버전 규칙**: MSIX 버전은 4부분 `Major.Minor.Build.Revision`. **Store 업로드 패키지는 4번째(revision)를
+  반드시 `0`으로** 둬야 하며(Store가 예약), 업데이트는 `Major`/`Minor`/`Build` 중 하나를 올려 단조 증가시킨다.
+  세 매니페스트(`ShotLog.csproj <Version>`, `app.manifest`, `Package.appxmanifest <Identity Version>`)를
+  같은 값으로 맞춰 재빌드·재업로드.
 
 ---
 
